@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>wua index</h1>
-    <!-- <NuxtRouteAnnouncer />
-    <NuxtWelcome /> -->
+    <NuxtLayout name="default" />
+      <NuxtPage />
+    <NuxtLayout />
   </div>
 </template>
