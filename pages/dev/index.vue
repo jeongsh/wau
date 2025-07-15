@@ -11,7 +11,7 @@
   <div v-for="user in users" :key="user.id">
     <input type="text" placeholder="이름" v-model="user.name" />
     <input type="email" placeholder="이메일" v-model="user.email" />
-    <button type="submit" @click="modifyUser(user.id, user.name, user.email)">수정</button>
+    <button type="submit" @click="modifyUser(user)">수정</button>
   </div>
 </template>
 
@@ -35,44 +35,48 @@ const addUser = async () => {
     email: userEmail.value
   }
 
-  await $fetch('/api/users/user', {
-    method: 'POST',
-    body: newUser
-  })
-    .then((result) => {
-      console.log('사용자 추가 성공')
-      console.log(result)
-      location.reload() // 페이지 새로고침
+  try {
+    const created = await $fetch('/api/users/user', {
+      method: 'POST',
+      body: newUser
     })
-    .catch((error) => {
-      console.error('사용자 추가 실패:', error)
-      console.log(error)
-      alert('사용자 추가에 실패했습니다.')
-    })
+
+    // 서버 응답에 name/email이 없을 경우 수동으로 포함
+    const completeUser = {
+      id: created.id,
+      name: created.name || newUser.name,
+      email: created.email || newUser.email
+    }
+
+    users.value.push(completeUser)
+
+    // 입력창 초기화
+    userName.value = ''
+    userEmail.value = ''
+  } catch (error) {
+    console.error('사용자 추가 실패:', error)
+    alert('사용자 추가에 실패했습니다.')
+  }
 }
 
-const modifyUser = async (id, userName, userEmail) => {
+const modifyUser = async (user) => {
   const updatedUser = {
-    id,
-    name: userName,
-    email: userEmail
+    id: user.id,
+    name: user.name,
+    email: user.email
   }
 
-  console.log(updatedUser)
+  try {
+    await $fetch('/api/users/user', {
+      method: 'PATCH',
+      body: updatedUser
+    })
 
-  await $fetch('/api/users/user', {
-    method: 'PATCH',
-    body: updatedUser
-  })
-    .then((result) => {
-      console.log('사용자 수정 성공')
-      console.log(result)
-      location.reload() // 페이지 새로고침
-    })
-    .catch((error) => {
-      console.error('사용자 수정 실패:', error)
-      alert('사용자 수정에 실패했습니다.')
-    })
+    console.log('사용자 수정 성공')
+    // users 배열은 v-model로 바인딩되어 있기 때문에 따로 갱신할 필요 없음
+  } catch (error) {
+    console.error('사용자 수정 실패:', error)
+    alert('사용자 수정에 실패했습니다.')
+  }
 }
-
 </script>
