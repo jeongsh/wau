@@ -5,4 +5,8 @@ export default defineNuxtConfig({
   modules: [
     '@prisma/nuxt',
   ],
+  //scss
+  css: [
+    '@/assets/scss/common.scss'
+  ],
 })
