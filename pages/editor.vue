@@ -331,9 +331,8 @@ const currentFontLabel = computed(() => {
   return font ? font.label : '프리텐다드';
 });
 
-const formatedDate = (date: string) => {
-  const d = new Date(date);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const formatedDate = (date: Date) => {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 };
 
 onMounted(() => {

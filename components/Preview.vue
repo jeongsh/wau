@@ -45,7 +45,6 @@
         {{ date.englishWeekday }}, {{ date.englishMonthName }} {{ date.day }}, {{ date.year }} | 
         {{ time.englishAmpm }} {{ time.hour }}:{{ time.minute }}
       </p>
-      {{ calendarPage }}
       <Calendar 
         :model-value="weddingInfo.date"
         :attributes="calendarAttrs"
