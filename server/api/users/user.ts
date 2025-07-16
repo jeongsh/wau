@@ -2,15 +2,25 @@ import prisma from "~/lib/prisma"
 
 // 조회 test api
 export const getUsers = async () => {
-  return await prisma.user.findMany()
+  return await prisma.user.findMany({
+    select: {
+      no: true,
+      uuid: true,
+      email: true,
+      phoneNumber: true,
+      name: true,
+      nickname: true,
+      createdDt: true,
+      modifiedDt: true,
+      role: true
+    }
+  })
 }
 
 // 생성 test api
 export const createUser = async (userObj: any) => {
   try {
     const { name, email, phoneNumber, createdDt, updatedDt } = userObj
-
-    console.log(createdDt)
     
     const result = await prisma.user.create({
       data: { name, email, phoneNumber, createdDt, updatedDt }

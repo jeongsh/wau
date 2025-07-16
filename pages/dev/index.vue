@@ -26,14 +26,16 @@ const users = ref([])
 const userName = ref('')
 const userEmail = ref('')
 const userPhone = ref('')
+const { $date } = useNuxtApp()
 
 onMounted(async () => {
   users.value = await $fetch('/api/users/user')
   users.value.forEach(user => {
-    user.createdDt = toKST(user.createdDt)
-    user.updatedDt = toKST(user.updatedDt)
+    user.createdDt = $date.toKST(user.createdDt)
+    user.updatedDt = $date.toKST(user.updatedDt)
   })
 })
+  
 
 const addUser = async () => {
   if (!userName.value || !userEmail.value || !userPhone.value) {

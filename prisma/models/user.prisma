@@ -1,6 +1,6 @@
 model User {
   no          Int       @id @default(autoincrement())
-  uuid        String    @unique() @default(uuid()) @db.VarChar(100)
+  uuid        String    @unique @default(uuid()) @db.VarChar(100)
   email       String    @unique @db.VarChar(50)
   phoneNumber String    @unique @db.VarChar(20)
   password    String    @default("1234") @db.VarChar(255)
