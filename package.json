@@ -22,10 +22,15 @@
     "pinia": "^3.0.3",
     "v-calendar": "^3.1.2",
     "vue": "^3.5.17",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "dayjs": "^1.11.13"
   },
   "devDependencies": {
     "prisma": "^6.11.1",
     "sass-embedded": "^1.89.2"
+  },
+  "prisma": {
+    "schema": "./prisma"
   }
+  
 }

@@ -1,17 +1,23 @@
 <template>
-  <div>
-    [유저 정보 등록]
-  </div>
-  <input type="text" placeholder="이름" v-model="userName" />
-  <input type="email" placeholder="이메일" v-model="userEmail" />
-  <button type="submit" @click="addUser">추가</button>
-  <div>
-    [유저 정보 수정]
-  </div>
-  <div v-for="user in users" :key="user.id">
-    <input type="text" placeholder="이름" v-model="user.name" />
-    <input type="email" placeholder="이메일" v-model="user.email" />
-    <button type="submit" @click="modifyUser(user)">수정</button>
+  <div class="body">
+    <div>
+      [유저 정보 등록]
+    </div>
+    <div>
+      <input type="text" placeholder="이름" v-model="userName" />
+      <input type="email" placeholder="이메일" v-model="userEmail" />
+      <input type="tel" placeholder="전화번호" v-model="userPhone" />
+      <button type="submit" @click="addUser">추가</button>
+    </div>
+    <div>
+      [유저 정보 수정]
+      {{ users }}
+    </div>
+    <div v-for="user in users" :key="user.id">
+      <input type="text" placeholder="이름" v-model="user.name" />
+      <input type="email" placeholder="이메일" v-model="user.email" />
+      <button type="submit" @click="modifyUser(user)">수정</button>
+    </div>
   </div>
 </template>
 
@@ -19,20 +25,26 @@
 const users = ref([])
 const userName = ref('')
 const userEmail = ref('')
+const userPhone = ref('')
 
 onMounted(async () => {
   users.value = await $fetch('/api/users/user')
+  users.value.forEach(user => {
+    user.createdDt = toKST(user.createdDt)
+    user.updatedDt = toKST(user.updatedDt)
+  })
 })
 
 const addUser = async () => {
-  if (!userName.value || !userEmail.value) {
+  if (!userName.value || !userEmail.value || !userPhone.value) {
     alert('이름과 이메일을 입력해주세요.')
     return
   }
 
   const newUser = {
     name: userName.value,
-    email: userEmail.value
+    email: userEmail.value,
+    phoneNumber: userPhone.value
   }
 
   try {

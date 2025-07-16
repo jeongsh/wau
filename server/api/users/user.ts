@@ -6,10 +6,14 @@ export const getUsers = async () => {
 }
 
 // 생성 test api
-export const createUser = async (name: string, email: string) => {
+export const createUser = async (userObj: any) => {
   try {
+    const { name, email, phoneNumber, createdDt, updatedDt } = userObj
+
+    console.log(createdDt)
+    
     const result = await prisma.user.create({
-      data: { name, email }
+      data: { name, email, phoneNumber, createdDt, updatedDt }
     })
 
     return {success: true, code: 200, data: result} 
