@@ -1,0 +1,74 @@
+.pretendard{
+  font-family: 'Pretendard', sans-serif;
+}
+
+@font-face {
+  font-family: 'Ownglyph_corncorn-Rg';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2412-1@1.0/Ownglyph_corncorn-Rg.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.corncorn {
+  font-family: 'Ownglyph_corncorn-Rg', sans-serif;
+}
+
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+.gmarket {
+  font-family: 'GmarketSans', sans-serif;
+}
+
+@font-face {
+  font-family: 'LeeSeoyun';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.lee-seoyun {
+  font-family: 'LeeSeoyun', sans-serif;
+}
+
+@font-face {
+  font-family: 'Amphora';
+  src: url('@/assets/fonts/Amphora-Regular.woff2') format('woff2'),
+      url('@/assets/fonts/Amphora-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.amphora {
+  font-family: 'Amphora', sans-serif;
+}
+
+.fontsize{
+  &-S{
+    font-size: 0.85em;
+  }
+  &-M{
+    font-size: 1em;
+  }
+  &-L{
+    font-size: 1.15em;
+  }
+}

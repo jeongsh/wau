@@ -2,7 +2,7 @@
 
 $font-system: -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 $font-family-sans-serif: 'pretendard', #{$font-system};
-*{font-family: $font-family-sans-serif; font-weight: 400;&:focus-visible{outline: none;} letter-spacing: -0.015em; line-height: normal; font-size: 16px;}
+*{font-family: $font-family-sans-serif; font-weight: 400;&:focus-visible{outline: none;} letter-spacing: -0.015em; line-height: normal;}
 blockquote, body, dd, dl, dt, fieldset, figure, h1, h2, h3, h4, h5, h6, hr, html, iframe, legend, li, ol, p, pre, textarea, ul {margin:0;padding:0}
 h1, h2, h3, h4, h5, h6 {font-size:100%;font-weight:600}
 ul {list-style:none; padding-left: 0}
