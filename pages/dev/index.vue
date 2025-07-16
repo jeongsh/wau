@@ -7,25 +7,55 @@
       <input type="text" placeholder="이름" v-model="userName" />
       <input type="email" placeholder="이메일" v-model="userEmail" />
       <input type="tel" placeholder="전화번호" v-model="userPhone" />
+      <input type="text" placeholder="닉네임" v-model="nickname" />
       <button type="submit" @click="addUser">추가</button>
     </div>
     <div>
       [유저 정보 수정]
       {{ users }}
     </div>
-    <div v-for="user in users" :key="user.id">
-      <input type="text" placeholder="이름" v-model="user.name" />
-      <input type="email" placeholder="이메일" v-model="user.email" />
-      <button type="submit" @click="modifyUser(user)">수정</button>
-    </div>
+    <table>
+      <tr>
+        <th>이름</th>
+        <th>이메일</th>
+        <th>폰번호</th>
+        <th>닉네임</th>
+        <th>생성일</th>
+        <th></th>
+      </tr>
+      <tr v-for="user in users" :key="user.no">
+        <td>
+          <input type="text" v-model="user.name">
+        </td>
+        <td>
+          <input type="text" v-model="user.email">
+        </td>
+        <td>
+          <input type="text" v-model="user.phoneNumber">
+        </td>
+        <td>
+          <input type="text" v-model="user.nickname">
+        </td>
+        <td>
+          <input type="text" v-model="user.createdDt">
+        </td>
+        <td>
+          <button type="submit" @click="modifyUser(user)">수정</button>
+        </td>
+      </tr>
+    </table>
+
   </div>
 </template>
 
 <script setup>
+// import { User, UserCreateDto, UserUpdateDto, UserDeleteDto } from '~/types/user'
+
 const users = ref([])
 const userName = ref('')
 const userEmail = ref('')
 const userPhone = ref('')
+const nickname = ref('')
 const { $date } = useNuxtApp()
 
 onMounted(async () => {
@@ -35,7 +65,7 @@ onMounted(async () => {
     user.updatedDt = $date.toKST(user.updatedDt)
   })
 })
-  
+
 
 const addUser = async () => {
   if (!userName.value || !userEmail.value || !userPhone.value) {
@@ -74,8 +104,9 @@ const addUser = async () => {
 }
 
 const modifyUser = async (user) => {
+
   const updatedUser = {
-    id: user.id,
+    id: user.no,
     name: user.name,
     email: user.email
   }

@@ -13,6 +13,12 @@ export const getUsers = async () => {
       createdDt: true,
       modifiedDt: true,
       role: true
+    },
+    where: {
+      deletedYn: false
+    },
+    orderBy: {
+      createdDt: 'desc'
     }
   })
 }
@@ -21,12 +27,12 @@ export const getUsers = async () => {
 export const createUser = async (userObj: any) => {
   try {
     const { name, email, phoneNumber, createdDt, updatedDt } = userObj
-    
+
     const result = await prisma.user.create({
       data: { name, email, phoneNumber, createdDt, updatedDt }
     })
 
-    return {success: true, code: 200, data: result} 
+    return {success: true, code: 200, data: result}
   }
   catch {
     console.error('Error creating user')
@@ -36,9 +42,9 @@ export const createUser = async (userObj: any) => {
 }
 
 // 수정 test api
-export const updateUser = async (id: number, name: string, email: string) => {
+export const updateUser = async (no: number, name: string, email: string) => {
   return await prisma.user.update({
-    where: { id },
+    where: { no },
     data: { name, email }
   })
 }
