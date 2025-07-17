@@ -2,10 +2,20 @@ export interface DesignInfo {
   themeColor: string;
   fontStyle: string;
   fontSize: string;
+  intro: {
+    isUseIntro: boolean;
+    isShowIntro: boolean;
+    type: string | null;
+    text: string | null;
+    textColor: string | null;
+    textSize: string | null;
+    image: string | null;
+  }
   mainVisual: {
     type: string;
     image: string;
   };
+  greeting : string,
   calendar:{
     isShowCalendar: boolean;
     isShowCountdown: boolean;
@@ -16,6 +26,7 @@ export interface WeddingInfo {
   bride: {
     name: string;
     familyName: string;
+    relation: string;
     number: string;
     bank: string | null;
     account: string | null;
@@ -26,11 +37,12 @@ export interface WeddingInfo {
       bank: string | null;
       account: string | null;
       isDied: boolean;
-    }> | null;
+    }>;
   };
   groom: {
     name: string;
     familyName: string;
+    relation: string;
     number: string;
     bank: string | null;
     account: string | null;
@@ -41,7 +53,7 @@ export interface WeddingInfo {
       bank: string | null;
       account: string | null;
       isDied: boolean;
-    }> | null;
+    }>;
   };
   date: Date;
   time: {

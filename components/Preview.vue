@@ -1,6 +1,9 @@
 <template>
   <div 
-    class="preview" 
+    class="preview"
+    :style="{
+      overflowY : designInfo.intro.isShowIntro ? 'hidden' : 'auto',
+    }" 
     :class="[
       `theme-${designInfo.themeColor}`,
       `${designInfo.fontStyle}`,
@@ -8,6 +11,12 @@
     ]">
     <section class="sec-main">
       <component :is="MainVisualComponent" :designInfo="designInfo" :weddingInfo="weddingInfo" />
+      <component 
+        v-if="designInfo.intro.isShowIntro"
+        :is="IntroComponent" 
+        :designInfo="designInfo" 
+        :weddingInfo="weddingInfo" 
+      />
     </section>
     <BlocksInivitation />
     <section class="sec-day">
@@ -31,22 +40,32 @@
 
 <script setup lang="ts">
 import type { DesignInfo, WeddingInfo } from '~/types/editor'; 
+import { useEditorStore } from '~/stores/editor';
 
-const props = defineProps<{
-  designInfo: DesignInfo;
-  weddingInfo: WeddingInfo;
-}>();
+const editorStore = useEditorStore();
+const designInfo = ref(editorStore.designInfo);
+const weddingInfo = ref(editorStore.weddingInfo);
+
+const IntroComponent = computed(() => {
+  // themeType을 명시적으로 참조하여 반응성 확보
+  const themeType = designInfo.value.intro.type;
+  if(themeType) {
+    return defineAsyncComponent(() =>
+      import(`@/components/blocks/intros/${themeType}.vue`)
+    );
+  }
+});
 
 const MainVisualComponent = computed(() => {
   // themeType을 명시적으로 참조하여 반응성 확보
-  const themeType = props.designInfo.mainVisual.type || 'A';
+  const themeType = designInfo.value.mainVisual.type || 'A';
   return defineAsyncComponent(() =>
     import(`@/components/blocks/MainVisual/${themeType}.vue`)
   );
 });
 
 const date = computed(() => {
-  const date = props.weddingInfo.date;
+  const date = weddingInfo.value.date;
   const englishMonthNames = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -70,7 +89,7 @@ const date = computed(() => {
 });
 
 const time = computed(() => {
-  const { hour, minute, ampm } = props.weddingInfo.time;
+  const { hour, minute, ampm } = weddingInfo.value.time;
   const englishAmpm = ampm === '오전' ? 'AM' : 'PM';
   return {
     hour: String(hour).padStart(2, '0'),
@@ -93,6 +112,7 @@ const time = computed(() => {
     height: 100%;
     width: 100%;
     background: var(--main-bg-color);
+    position: relative;
   }
   
   .sec-day{
@@ -118,9 +138,5 @@ const time = computed(() => {
     }
   }
 }
-.sec-date{
-  height: 100%;
-  background: var(--thick-color);
-  text-align: center;
-}
+
 </style>

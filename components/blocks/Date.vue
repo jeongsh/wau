@@ -116,5 +116,9 @@ const dDay = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-
+.sec-date{
+  padding: 120px 0;
+  background: var(--thick-color);
+  text-align: center;
+}
 </style>

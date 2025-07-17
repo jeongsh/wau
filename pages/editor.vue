@@ -3,10 +3,7 @@
     <div class="container d-flex ai-center g-32">
       <div class="wrap-preview">
         <div class="box-preview">
-          <Preview
-            :designInfo="designInfo"
-            :weddingInfo="weddingInfo"
-          />
+          <Preview />
         </div>
       </div>
       <div class="box-editor">
@@ -53,29 +50,7 @@
             </div>
           </div>
         </div>
-        <div class="wrap-accordion active">
-          <button class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">테마 정보</p>
-            <i class="icon-chevron-down"></i>
-          </button>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-label-theme">
-                <label class="label-theme-type" v-for="mainVisual in mainVisuals" :key="mainVisual">
-                  <input type="radio" name="mainVisualType" id="" :value="mainVisual" v-model="designInfo.mainVisual.type" />
-                  {{ mainVisual }}
-                </label>
-              </div>
-              <div class="box-input">
-                <p class="input-title">메인 이미지</p>
-              </div>
-              <div class="box-input">
-                <input type="file" @change="onImageChange" accept="image/*" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="wrap-accordion active">
+        <div class="wrap-accordion">
           <button class="btn-accordion" @click="toggleAccordion">
             <p class="accordion-title">디자인 정보</p>
             <i class="icon-chevron-down"></i>
@@ -125,6 +100,58 @@
                     <input type="radio" name="templateColor" id="" :value="themeColor" v-model="designInfo.themeColor" />
                   </label>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wrap-accordion">
+          <button class="btn-accordion" @click="toggleAccordion">
+            <p class="accordion-title">인트로(페이지 시작할때 애니메이션 같은거)</p>
+            <i class="icon-chevron-down"></i>
+          </button>
+          <div class="box-accordion">
+            <div class="box-content">
+              <div class="box-label-theme">
+                <label class="label-theme-type" v-for="introType in introTypes" :key="introType">
+                  <input type="radio" :value="introType" v-model="designInfo.intro.type" @change="onChangeIntro" />
+                  {{ introType }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wrap-accordion">
+          <button class="btn-accordion" @click="toggleAccordion">
+            <p class="accordion-title">커버 디자인</p>
+            <i class="icon-chevron-down"></i>
+          </button>
+          <div class="box-accordion">
+            <div class="box-content">
+              <div class="box-label-theme">
+                <label class="label-theme-type" v-for="mainVisual in mainVisuals" :key="mainVisual">
+                  <input type="radio" name="mainVisualType" id="" :value="mainVisual" v-model="designInfo.mainVisual.type" />
+                  {{ mainVisual }}
+                </label>
+              </div>
+              <div class="box-input">
+                <p class="input-title">커버 이미지</p>
+              </div>
+              <div class="box-input">
+                <input type="file" @change="onImageChange" accept="image/*" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wrap-accordion">
+          <button class="btn-accordion" @click="toggleAccordion">
+            <p class="accordion-title">인사말</p>
+            <i class="icon-chevron-down"></i>
+          </button>
+          <div class="box-accordion">
+            <div class="box-content">
+              <div class="box-input">
+                <p class="input-title">인사말</p>
+                <!-- TODO: 텍스트 에디터 넣을거임 -->
               </div>
             </div>
           </div>
@@ -209,7 +236,7 @@
                 </label>
               </div>
               <div class="box-input ai-center">
-                <p class="input-title">달력</p>
+                <p class="input-title">디데이</p>
                 <label class="btn-toggle">
                   <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCountdown" />
                   <span class="circle"></span>
@@ -251,8 +278,13 @@
 </template>
 
 <script setup lang="ts">
-import Preview from '~/components/Preview.vue';
+import { useEditorStore } from '~/stores/editor';
 
+const editorStore = useEditorStore();
+const designInfo = ref(editorStore.designInfo);
+const weddingInfo = ref(editorStore.weddingInfo);
+
+const introTypes = ['A', 'B', 'C'];
 const mainVisuals = ['A', 'B'];
 const themeColors = ['blue', 'green', 'pink', 'purple'];
 const fontStyles = [
@@ -293,91 +325,6 @@ const hourOptions = [
 const minuteOptions = [
   '0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'
 ];
-
-const designInfo = ref({
-  themeColor: 'blue',
-  fontStyle: 'pretendard',
-  fontSize: 'M',
-  mainVisual: {
-    type: 'A',
-    image: '',
-  },
-  calendar: {
-    isShowCalendar: true,
-    isShowCountdown: true,
-  }
-});
-
-const weddingInfo = ref({
-  bride: {
-    name: '',
-    familyName: '',
-    relation: '딸',
-    number: '',
-    bank: '',
-    account: '',
-    parents:[
-      {
-        relation: '',
-        name: '',
-        number: '',
-        bank: '',
-        account: '',
-        isDied: false,
-      },
-      {
-        relation: '',
-        name: '',
-        number: '',
-        bank: '',
-        account: '',
-        isDied: false,
-      }
-    ]
-  },
-  groom: {
-    name: '',
-    familyName: '',
-    relation: '아들',
-    number: '',
-    bank: '',
-    account: '',
-    parents:[
-      {
-        relation: '',
-        name: '',
-        number: '',
-        bank: '',
-        account: '',
-        isDied: false,
-      },
-      {
-        relation: '',
-        name: '',
-        number: '',
-        bank: '',
-        account: '',
-        isDied: false,
-      }
-    ]
-  },
-  // 오늘 날짜로 초기화
-  date: new Date(),
-  time: {
-    ampm: '오후',
-    hour: 12,
-    minute: 0,
-  },
-  // TODO: 지도 연동해야됨
-  location: {
-    address: '',
-    latitude: 0,
-    longitude: 0,
-    name: '',
-    detail: '',
-    number: '',
-  },
-});
 
 const currentFontLabel = computed(() => {
   const font = fontStyles.find(f => f.fontFamily === designInfo.value.fontStyle);
@@ -432,6 +379,9 @@ onMounted(() => {
   });
 });
 
+const onChangeIntro = () => {
+  designInfo.value.intro.isShowIntro = true;
+};
 
 const onImageChange = (event: Event) => {
   const target = event.target as HTMLInputElement;

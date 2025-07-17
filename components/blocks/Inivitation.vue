@@ -2,20 +2,16 @@
   <section class="sec-invitation">
     <p class="sub-title">(❁´◡`❁)</p>
     <div class="box-text">
-      <p>오랜 기다림 속에서<br>
-        저희 두사람, 한 마음 되어<br>
-        참된 사랑의 결실을 맺게 되었습니다.<br>
-        <br><br>
-        10월의 어느 햇살 고운 날,<br>
-        귀한 걸음 하시어 따뜻한 마음으로<br>
-        축복해 주시면 더 없는 기쁨이 되겠습니다.
-      </p>
+      <p v-html="designInfo.greeting"></p>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-// TODO: 인사말도 받아야됨 아직 안했음
+import type { DesignInfo, WeddingInfo } from '~/types/editor';
+import { useEditorStore } from '~/stores/editor';
+const editorStore = useEditorStore();
+const { designInfo, weddingInfo } = storeToRefs(editorStore);
 </script>
 
 <style lang="scss" scoped>

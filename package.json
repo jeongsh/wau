@@ -15,6 +15,7 @@
     "prisma:pull": "npx prisma db pull && npx prisma generate"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.11.1",
     "@popperjs/core": "^2.11.8",
     "@prisma/client": "^6.11.1",
     "@prisma/nuxt": "^0.3.0",
