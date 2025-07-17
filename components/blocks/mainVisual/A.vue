@@ -1,7 +1,7 @@
 <template>
   <div class="box-main">
     <div class="box-img">
-      <img :src="designInfo.mainImage" alt="Main Visual" />
+      <img :src="designInfo.mainVisual.image" alt="Main Visual" />
     </div>
     <h3>영어로 뭐라 씨부리기</h3>
     <p>

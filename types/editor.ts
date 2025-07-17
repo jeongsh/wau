@@ -1,9 +1,15 @@
 export interface DesignInfo {
-  themeType: string;
   themeColor: string;
   fontStyle: string;
   fontSize: string;
-  mainImage: string;
+  mainVisual: {
+    type: string;
+    image: string;
+  };
+  calendar:{
+    isShowCalendar: boolean;
+    isShowCountdown: boolean;
+  }
 }
 
 export interface WeddingInfo {
@@ -11,28 +17,30 @@ export interface WeddingInfo {
     name: string;
     familyName: string;
     number: string;
-    bank: string;
-    account: string;
+    bank: string | null;
+    account: string | null;
     parents: Array<{
       relation: string;
       name: string;
-      number: string;
-      bank: string;
-      account: string;
+      number: string | null;
+      bank: string | null;
+      account: string | null;
+      isDied: boolean;
     }> | null;
   };
   groom: {
     name: string;
     familyName: string;
     number: string;
-    bank: string;
-    account: string;
+    bank: string | null;
+    account: string | null;
     parents: Array<{
       relation: string;
       name: string;
-      number: string;
-      bank: string;
-      account: string;
+      number: string | null;
+      bank: string | null;
+      account: string | null;
+      isDied: boolean;
     }> | null;
   };
   date: Date;
@@ -41,5 +49,12 @@ export interface WeddingInfo {
     hour: number;
     minute: number;
   };
-  location: string;
+  location: {
+    address: string;
+    latitude: number;
+    longitude: number;
+    name: string;
+    detail: string | null;
+    number: string | null;
+  };
 }

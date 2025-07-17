@@ -61,9 +61,9 @@
           <div class="box-accordion">
             <div class="box-content">
               <div class="box-label-theme">
-                <label class="label-theme-type" v-for="themeType in themeTypes" :key="themeType">
-                  <input type="radio" name="templateType" id="" :value="themeType" v-model="designInfo.themeType" />
-                  {{ themeType }}
+                <label class="label-theme-type" v-for="mainVisual in mainVisuals" :key="mainVisual">
+                  <input type="radio" name="mainVisualType" id="" :value="mainVisual" v-model="designInfo.mainVisual.type" />
+                  {{ mainVisual }}
                 </label>
               </div>
               <div class="box-input">
@@ -138,7 +138,6 @@
             <div class="box-content">
               <div class="box-input">
                 <p class="input-title">예식일</p>
-
                 <div class="wrap-datepicker">
                   <button class="btn-datepicker" @click="toggleDatePicker">
                     {{ formatedDate(weddingInfo.date) }}
@@ -202,6 +201,47 @@
                   </div>
                 </div>
               </div>
+              <div class="box-input ai-center">
+                <p class="input-title">캘린더</p>
+                <label class="btn-toggle">
+                  <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCalendar" />
+                  <span class="circle"></span>
+                </label>
+              </div>
+              <div class="box-input ai-center">
+                <p class="input-title">달력</p>
+                <label class="btn-toggle">
+                  <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCountdown" />
+                  <span class="circle"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wrap-accordion">
+          <button class="btn-accordion" @click="toggleAccordion">
+            <p class="accordion-title">예식 장소</p>
+            <i class="icon-chevron-down"></i>
+          </button>
+          <div class="box-accordion">
+            <div class="box-content">
+              <div class="box-input">
+                <p class="input-title">주소</p>
+                <input class="input-l" type="text" v-model="weddingInfo.location.address" placeholder="예식 장소를 입력해주세요." />
+                <button class="btn-find">주소 검색</button>
+              </div>
+              <div class="box-input">
+                <p class="input-title">예식장 이름</p>
+                <input class="input-l" type="text" v-model="weddingInfo.location.name" placeholder="층과 홀을 입력해주세요." />
+              </div>
+              <div class="box-input">
+                <p class="input-title">층 / 홀</p>
+                <input class="input-l" type="text" v-model="weddingInfo.location.detail" placeholder="층과 홀을 입력해주세요." />
+              </div>
+              <div class="box-input">
+                <p class="input-title">연락처</p>
+                <input class="input-l" type="text" v-model="weddingInfo.location.number" placeholder="-없이 입력해주세요." />
+              </div>
             </div>
           </div>
         </div>
@@ -213,7 +253,7 @@
 <script setup lang="ts">
 import Preview from '~/components/Preview.vue';
 
-const themeTypes = ['A', 'B'];
+const mainVisuals = ['A', 'B'];
 const themeColors = ['blue', 'green', 'pink', 'purple'];
 const fontStyles = [
   {
@@ -255,11 +295,17 @@ const minuteOptions = [
 ];
 
 const designInfo = ref({
-  themeType: 'A',
   themeColor: 'blue',
   fontStyle: 'pretendard',
   fontSize: 'M',
-  mainImage: '',
+  mainVisual: {
+    type: 'A',
+    image: '',
+  },
+  calendar: {
+    isShowCalendar: true,
+    isShowCountdown: true,
+  }
 });
 
 const weddingInfo = ref({
@@ -323,7 +369,14 @@ const weddingInfo = ref({
     minute: 0,
   },
   // TODO: 지도 연동해야됨
-  location: '서울시 강남구',
+  location: {
+    address: '',
+    latitude: 0,
+    longitude: 0,
+    name: '',
+    detail: '',
+    number: '',
+  },
 });
 
 const currentFontLabel = computed(() => {
@@ -385,7 +438,7 @@ const onImageChange = (event: Event) => {
   if (target.files && target.files[0]) {
     const reader = new FileReader();
     reader.onload = (e) => {
-      designInfo.value.mainImage = e.target?.result as string;
+      designInfo.value.mainVisual.image = e.target?.result as string;
     };
     reader.readAsDataURL(target.files[0]);
   }
