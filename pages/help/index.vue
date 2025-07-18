@@ -10,7 +10,6 @@
     </div>
     <div class="content">
       <h1>공지사항</h1>
-      {{notices}}
       <table>
         <thead>
           <tr>
@@ -19,9 +18,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="notice in notices" :key="notice.id" @click="detailNotice(notice.no)">
+          <tr v-for="notice in noticeList" @click="detailNotice(notice.no)">
             <td>{{ notice.title }}</td>
-            <td>{{ $date.toKST(notice.createdDt) }}</td>
+            <td>{{ notice.createdDt }}</td>
           </tr>
         </tbody>
       </table>
@@ -30,18 +29,23 @@
 </template>
 
 <script setup lang="ts">
-const notices = ref([])
+import type { NoticeInfo } from '~/types/notice'
+const notices = ref([]) as Ref<NoticeInfo[]>
+const noticeList = ref<{ createdDt: string; updatedDt: string; no: number }[]>([])
 const { $date } = useNuxtApp()
 
 onMounted(async () => {
   notices.value = await $fetch('/api/help/notices')
   notices.value.forEach(notice => {
-    notice.createdDt = $date.toKST(notice.createdDt)
-    notice.updatedDt = $date.toKST(notice.updatedDt)
+    noticeList.value.push({
+      createdDt: $date.toKST(notice.createdDt),
+      updatedDt: $date.toKST(notice.updatedDt),
+      no: notice.no
+    })
   })
 })
 
-const detailNotice = (no) => {
+const detailNotice = (no: number) => {
   navigateTo(`/help/notice/${no}`)
 }
 </script>

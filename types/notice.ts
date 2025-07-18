@@ -4,7 +4,7 @@ export interface NoticeInfo {
   title: string
   content: string
   pick: boolean
-  createdDt: Date
+  createdDt: Date 
   updatedDt: Date
   modifiedDt?: Date | null
   deletedDt?: Date | null
