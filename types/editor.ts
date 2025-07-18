@@ -16,6 +16,7 @@ export interface DesignInfo {
     image: string;
   };
   greeting : string,
+  designPage: string | null,
   calendar:{
     isShowCalendar: boolean;
     isShowCountdown: boolean;

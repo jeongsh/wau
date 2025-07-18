@@ -157,6 +157,22 @@
           </div>
         </div>
         <div class="wrap-accordion">
+          <div class="btn-accordion" @click="toggleAccordion">
+            <p class="accordion-title">디자인 페이지</p>
+            <i class="icon-chevron-down"></i>
+          </div>
+          <div class="box-accordion">
+            <div class="box-content">
+              <div class="box-label-theme">
+                <label class="label-theme-type" v-for="designPage in designPages" :key="designPage">
+                  <input type="radio" name="mainVisualType" id="" :value="designPage" v-model="designInfo.designPage" />
+                  {{ designPage }}
+                </label>
+              </div>
+            </div>  
+          </div>
+        </div>
+        <div class="wrap-accordion">
           <button class="btn-accordion" @click="toggleAccordion">
             <p class="accordion-title">예식 일시</p>
             <i class="icon-chevron-down"></i>
@@ -286,6 +302,7 @@ const weddingInfo = ref(editorStore.weddingInfo);
 
 const introTypes = ['A', 'B', 'C'];
 const mainVisuals = ['A', 'B'];
+const designPages = ['A', 'B', 'C'];
 const themeColors = ['blue', 'green', 'pink', 'purple'];
 const fontStyles = [
   {
@@ -343,6 +360,7 @@ onMounted(() => {
       boxAccordion.style.height = `${boxAccordion.scrollHeight}px`;
       boxAccordion.style.opacity = '1';
       boxAccordion.style.pointerEvents = 'auto';
+      boxAccordion.style.overflowY = 'visible';
     }
   });
   // 마우스 클릭시 wrap-select가 아니라면 wrap-select의 active 클래스를 제거
@@ -431,12 +449,13 @@ const toggleAccordion = (event: MouseEvent) => {
     box.style.height = `${box.scrollHeight}px`;
     box.style.opacity = '1';
     box.style.pointerEvents = 'auto';
+    box.style.overflowY = 'visible';
   } else {
     box.style.borderTop = 'none';
     box.style.height = '0px';
     box.style.opacity = '0';
     box.style.pointerEvents = 'none';
-    
+    box.style.overflowY = 'hidden';
   }
 };
 
@@ -577,7 +596,7 @@ const toggleDatePicker = () => {
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: 10;
+    z-index: 100;
     width: 100%;
     display: none;
     &.active{

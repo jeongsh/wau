@@ -15,6 +15,7 @@ export const useEditorStore = defineStore('info', ()=>{
       textSize: null,
       image: null,
     },
+    designPage: 'A',
     mainVisual: {
       type: 'A',
       image: '',
@@ -106,10 +107,48 @@ export const useEditorStore = defineStore('info', ()=>{
   const offIntro = () => {
     designInfo.value.intro.isShowIntro = false;
   }
+  const formattedDate = computed(() => {
+    const date = weddingInfo.value.date;
+    const englishMonthNames = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+
+    const englishWeekdayNames = [
+      'Son', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sun'
+    ];
+    const koreanWeekdayNames = [
+      '일', '월', '화', '수', '목', '금', '토'
+    ];
+
+    return {
+      year: date.getFullYear(),
+      month: String(date.getMonth() + 1),
+      englishMonthName: englishMonthNames[date.getMonth()],
+      day: String(date.getDate()).padStart(2, '0'),
+      englishWeekday: englishWeekdayNames[date.getDay()],
+      koreanWeekday: koreanWeekdayNames[date.getDay()],
+    };
+  });
+
+  const formattedTime = computed(() => {
+    const { hour, minute, ampm } = weddingInfo.value.time;
+    const englishAmpm = ampm === '오전' ? 'AM' : 'PM';
+    return {
+      hour: String(hour).padStart(2, '0'),
+      minute: String(minute).padStart(2, '0'),
+      ampm,
+      englishAmpm,
+    };
+  });
 
   return {
     designInfo,
     weddingInfo,
+    formattedDate,
+    formattedTime,
     offIntro,
   };
+
+  
 });
