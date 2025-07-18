@@ -1,6 +1,7 @@
 import { UserRole, UserCreateDto, UserUpdateDto, UserDeleteDto } from "~/types/user";
 import { Prisma } from "@prisma/client";
 
+// Prisma ORM에 맞춰 데이터 타입을 변환 시켜줌
 export const mapCreateDtoToPrisma = (dto: UserCreateDto): Prisma.UserCreateInput => {
   return {
     email: dto.email,
