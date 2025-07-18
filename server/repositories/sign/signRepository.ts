@@ -5,7 +5,7 @@ export const insertUser = async (data: Prisma.UserCreateInput) => {
   return await prisma.$transaction(async (tx) => {
     return await tx.user.create({
       data: data,
-        select: {
+      select: {
         no: true,
         uuid: true,
         email: true,
