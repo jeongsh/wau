@@ -3,23 +3,23 @@
     <h3>회원 가입</h3>
       <div>
       이메일
-      <input type="text" placeholder="이메일" v-model="userEmail" />
+      <input type="text" placeholder="이메일" v-model="user.email" />
     </div>
     <div>
       연락처
-      <input type="tel" placeholder="전화번호" v-model="userPhone" />
+      <input type="tel" placeholder="전화번호" v-model="user.phoneNumber" />
     </div>
     <div>
       비밀번호
-      <input type="password" placeholder="비밀번호" v-model="userPassword" />
+      <input type="password" placeholder="비밀번호" v-model="user.password" />
     </div>
     <div>
       이름
-      <input type="text" placeholder="이름" v-model="userName" />
+      <input type="text" placeholder="이름" v-model="user.name" />
     </div>
     <div>
       닉네임
-      <input type="text" placeholder="닉네임" v-model="nickname" />
+      <input type="text" placeholder="닉네임" v-model="user.nickname" />
     </div>
     <button type="button" @click="signUp">가입하기</button>
   </div>
@@ -28,29 +28,22 @@
 <script setup lang="ts">
 import type { UserCreateDto } from '~/types/user'
 
-
-const userEmail = ref('')
-const userPhone = ref('')
-const userPassword = ref('')
-const userName = ref('')
-const nickname = ref('')
+const user = reactive<UserCreateDto>({
+  email: '',
+  phoneNumber: '',
+  password: '',
+  name: '',
+  nickname: '',
+})
 
 const signUp = async () => {
+  const userObj: UserCreateDto = { ...user }
 
   // 유저 정보 유효성 검사
-  const valid = isValidUser()
+  const valid = isValidUser(userObj)
   if (!valid.result) {
     alert(valid.message)
     return
-  }
-
-  // 유저정보 객체 생성
-  const userObj: UserCreateDto = {
-    email: userEmail.value,
-    phoneNumber: userPhone.value,
-    name: userName.value,
-    nickname: nickname.value,
-    password: userPassword.value
   }
 
   try {
@@ -59,48 +52,45 @@ const signUp = async () => {
       body: userObj,
     })
 
-    console.log(result)
-
-    if (result.status === 'success') {
+    if (result.status) {
       alert('회원 가입이 완료되었습니다.')
-      // Redirect to login or home page
-      // window.location.href = '/login'
+      location.href='/'
     } else {
-      alert('회원 가입에 실패했습니다: ' + result.message)
+      throw new Error(result.message);
     }
   } catch (error) {
-    console.error('Error during user registration:', error)
-    alert('회원 가입 중 오류가 발생했습니다.')
+
+    if (error.statusCode >= 500) {
+      const errorData = error.data
+      const errorMsg = errorData.statusMessage
+      alert(errorMsg)
+      return
+    }
+
+    alert('회원가입에 실패했습니다.')
   }
 }
 
-const isValidUser = () => {
+// 유저 정보 유효성 검사
+const isValidUser = (userObj: UserCreateDto) => {
 
-  if (userEmail.value === '') {
-    return {
-      result: false,
-      message: '이메일을 입력해주세요.'
+  const fields = {
+    email: '이메일을 입력해주세요.',
+    phoneNumber: '전화번호를 입력해주세요.',
+    password: '비밀번호를 입력해주세요.',
+    name: '이름을 입력해주세요.',
+    nickname: '닉네임을 입력해주세요.',
+  }
+
+  for (const key in fields) {
+    if (!userObj[key as keyof UserCreateDto]) {
+      return {
+        result: false,
+        message: fields[key as keyof typeof fields]
+      }
     }
-  } else if (userPhone.value === '') {
-    return {
-      result: false,
-      message: '전화번호를 입력해주세요.'
-    }
-  } else if (userPassword.value === '') {
-    return {
-      result: false,
-      message: '비밀번호를 입력해주세요.'
-    }
-  } else if (userName.value === '') {
-    return {
-      result: false,
-      message: '이름을 입력해주세요.'
-    }
-  } else if (nickname.value === '') {
-    return {
-      result: false,
-      message: '닉네임을 입력해주세요.'
-    }
+
+    // TODO: 전화번호 문자열 검증, 이메일 검증, 비밀번호 재입력 확인 로직 필요
   }
 
   return {

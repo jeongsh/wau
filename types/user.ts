@@ -28,9 +28,6 @@ export interface UserCreateDto {
   name: string
   nickname: string
   password: string
-  role?: UserRole
-  createdDt?: Date
-  updatedDt?: Date
 }
 
 // 유저 수정시 호출해서 사용
