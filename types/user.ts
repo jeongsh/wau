@@ -13,8 +13,8 @@ export interface User {
   phoneNumber: string
   name: string
   nickname: string
-  createdDt: Date
-  updatedDt: Date
+  createdDt: Date | string
+  updatedDt: Date | string
   modifiedDt?: Date
   deletedDt?: Date
   deletedYn: boolean
@@ -27,8 +27,10 @@ export interface UserCreateDto {
   phoneNumber: string
   name: string
   nickname: string
-  createdDt: Date
-  updatedDt: Date
+  password: string
+  role?: UserRole
+  createdDt?: Date
+  updatedDt?: Date
 }
 
 // 유저 수정시 호출해서 사용
