@@ -7,287 +7,317 @@
         </div>
       </div>
       <div class="box-editor">
-        <div class="wrap-accordion active">
-          <button class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">신랑신부 정보</p>
-            <i class="icon-chevron-down"></i>
-          </button>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-input">
-                <p class="input-title">신랑</p>
-                <input class="input-s" type="text" v-model="weddingInfo.groom.familyName" placeholder="성" />
-                <input class="input-m"type="text" v-model="weddingInfo.groom.name" placeholder="이름" />
-                <input class="input-sm"type="text" v-model="weddingInfo.groom.relation" placeholder="관계" />
-              </div>
-              <div class="box-input">
-                <p class="input-title">아버지</p>
-                <input class="input-l" type="text" v-model="weddingInfo.groom.parents[0].name" placeholder="이름" />
-                <input class="input-sm" type="text" v-model="weddingInfo.groom.parents[0].relation" placeholder="관계" />
-              </div>
-              <div class="box-input">
-                <p class="input-title">어머니</p>
-                <input class="input-l" type="text" v-model="weddingInfo.groom.parents[1].name" placeholder="이름" />
-                <input class="input-sm" type="text" v-model="weddingInfo.groom.parents[1].relation" placeholder="관계" />
-              </div>
-              <div class="divider"></div>
-              <div class="box-input">
-                <p class="input-title">신부</p>
-                <input class="input-s" type="text" v-model="weddingInfo.bride.familyName" placeholder="성" />
-                <input class="input-m" type="text" v-model="weddingInfo.bride.name" placeholder="이름" />
-                <input class="input-sm" type="text" v-model="weddingInfo.bride.relation" placeholder="관계" />
-              </div>
-              <div class="box-input">
-                <p class="input-title">아버지</p>
-                <input class="input-l" type="text" v-model="weddingInfo.bride.parents[0].name" placeholder="이름" />
-                <input class="input-sm" type="text" v-model="weddingInfo.bride.parents[0].relation" placeholder="관계" />
-              </div>
-              <div class="box-input">
-                <p class="input-title">어머니</p>
-                <input class="input-l" type="text" v-model="weddingInfo.bride.parents[1].name" placeholder="이름" />
-                <input class="input-sm" type="text" v-model="weddingInfo.bride.parents[1].relation" placeholder="관계" />
-              </div>
-            </div>
+        <UtilsAccordion :title="'신랑 신부 정보'" :isOpen="true">
+          <div class="box-input">
+            <p class="input-title">신랑</p>
+            <input class="input-s" type="text" v-model="weddingInfo.groom.familyName" placeholder="성" />
+            <input class="input-m"type="text" v-model="weddingInfo.groom.name" placeholder="이름" />
+            <input class="input-sm"type="text" v-model="weddingInfo.groom.relation" placeholder="관계" />
           </div>
-        </div>
-        <div class="wrap-accordion">
-          <button class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">디자인 정보</p>
-            <i class="icon-chevron-down"></i>
-          </button>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-input">
-                <p class="input-title">폰트</p>
-                <div class="wrap-select" style="width: 140px;">
-                  <button 
-                    class="btn-select" 
-                    @click="toggleSelect"
-                    :class="designInfo.fontStyle"
-                  >
-                    {{ currentFontLabel }}
-                  </button>
-                  <div class="options">
-                    <button
-                      v-for="font in fontStyles" 
-                      @click="onChangeFontStyle(`${ font.fontFamily }`)" 
-                      :class="font.fontFamily">
-                      {{ font.label }}
-                    </button>
-                  </div>
-                </div>
-                <div class="wrap-select" style="width: 140px;">
-                  <button 
-                    class="btn-select" 
-                    @click="toggleSelect"
-                  >
-                    {{ designInfo.fontSize }}
-                  </button>
-                  <div class="options">
-                    <button
-                      v-for="size in fontSizes" 
-                      @click="onChangeFontSize(`${ size }`)" 
-                      :class="size">
-                      {{ size }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="box-input">
-                <p class="input-title">테마 컬러</p>
-                <div class="box-label-color">
-                  <label class="label-theme-type" :class="themeColor" v-for="themeColor in themeColors" :key="themeColor">
-                    <input type="radio" name="templateColor" id="" :value="themeColor" v-model="designInfo.themeColor" />
-                  </label>
-                </div>
-              </div>
-            </div>
+          <div class="box-input">
+            <p class="input-title">아버지</p>
+            <input class="input-l" type="text" v-model="weddingInfo.groom.parents[0].name" placeholder="이름" />
+            <input class="input-sm" type="text" v-model="weddingInfo.groom.parents[0].relation" placeholder="관계" />
           </div>
-        </div>
-        <div class="wrap-accordion">
-          <button class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">인트로(페이지 시작할때 애니메이션 같은거)</p>
-            <i class="icon-chevron-down"></i>
-          </button>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-label-theme">
-                <label class="label-theme-type" v-for="introType in introTypes" :key="introType">
-                  <input type="radio" :value="introType" v-model="designInfo.intro.type" @change="onChangeIntro" />
-                  {{ introType }}
+          <div class="box-input">
+            <p class="input-title">어머니</p>
+            <input class="input-l" type="text" v-model="weddingInfo.groom.parents[1].name" placeholder="이름" />
+            <input class="input-sm" type="text" v-model="weddingInfo.groom.parents[1].relation" placeholder="관계" />
+          </div>
+          <div class="divider"></div>
+          <div class="box-input">
+            <p class="input-title">신부</p>
+            <input class="input-s" type="text" v-model="weddingInfo.bride.familyName" placeholder="성" />
+            <input class="input-m" type="text" v-model="weddingInfo.bride.name" placeholder="이름" />
+            <input class="input-sm" type="text" v-model="weddingInfo.bride.relation" placeholder="관계" />
+          </div>
+          <div class="box-input">
+            <p class="input-title">아버지</p>
+            <input class="input-l" type="text" v-model="weddingInfo.bride.parents[0].name" placeholder="이름" />
+            <input class="input-sm" type="text" v-model="weddingInfo.bride.parents[0].relation" placeholder="관계" />
+          </div>
+          <div class="box-input">
+            <p class="input-title">어머니</p>
+            <input class="input-l" type="text" v-model="weddingInfo.bride.parents[1].name" placeholder="이름" />
+            <input class="input-sm" type="text" v-model="weddingInfo.bride.parents[1].relation" placeholder="관계" />
+          </div>
+        </UtilsAccordion>
+        <UtilsAccordion :title="'디자인 설정'">
+          <div class="box-content">
+            <div class="box-input">
+              <p class="input-title">폰트</p>
+              <UtilsSelectBox
+                :title="currentFontLabel"
+                :width="140"
+                isReverse
+              >
+                <button
+                  v-for="font in fontStyles" 
+                  @click="onChangeFontStyle(`${ font.fontFamily }`)" 
+                  :class="font.fontFamily">
+                  {{ font.label }}
+                </button>
+              </UtilsSelectBox>
+              <UtilsSelectBox
+                :title="designInfo.fontSize"
+                :width="48"
+                isReverse
+              >
+                <button
+                  v-for="size in fontSizes" 
+                  @click="onChangeFontSize(`${ size }`)" 
+                  :class="size">
+                  {{ size }}
+                </button>
+              </UtilsSelectBox>
+            </div>
+            <div class="box-input">
+              <p class="input-title">테마 컬러</p>
+              <div class="box-label-color">
+                <label class="label-theme-type" :class="themeColor" v-for="themeColor in themeColors" :key="themeColor">
+                  <input type="radio" name="templateColor" id="" :value="themeColor" v-model="designInfo.themeColor" />
                 </label>
               </div>
             </div>
           </div>
-        </div>
-        <div class="wrap-accordion">
-          <button class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">커버 디자인</p>
-            <i class="icon-chevron-down"></i>
-          </button>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-label-theme">
-                <label class="label-theme-type" v-for="mainVisual in mainVisuals" :key="mainVisual">
-                  <input type="radio" name="mainVisualType" id="" :value="mainVisual" v-model="designInfo.mainVisual.type" />
-                  {{ mainVisual }}
-                </label>
-              </div>
-              <div class="box-input">
-                <p class="input-title">커버 이미지</p>
-              </div>
-              <div class="box-input">
-                <input type="file" @change="onImageChange" accept="image/*" />
+        </UtilsAccordion>
+        <UtilsAccordion :title="'인트로'">
+          <div class="box-label-theme">
+            <label class="label-theme-type" v-for="introType in introTypes" :key="introType">
+              <input type="radio" :value="introType" v-model="designInfo.intro.type" @change="onChangeIntro" />
+              {{ introType }}
+            </label>
+          </div>
+        </UtilsAccordion>
+        <UtilsAccordion :title="'메인 비주얼'">
+          <div class="box-label-theme">
+            <label class="label-theme-type" v-for="mainVisual in mainVisuals" :key="mainVisual">
+              <input type="radio" name="mainVisualType" id="" :value="mainVisual" v-model="designInfo.mainVisual.type" />
+              {{ mainVisual }}
+            </label>
+          </div>
+          <div class="box-input">
+            <p class="input-title">커버 이미지</p>
+          </div>
+          <div class="box-input">
+            <input type="file" @change="onImageChange" accept="image/*" />
+          </div>
+        </UtilsAccordion>
+        <UtilsAccordion :title="'인사말'">
+          <div class="box-input">
+            <p class="input-title">인사말</p>
+            <!-- TODO: 텍스트 에디터 넣을거임 -->
+          </div>
+        </UtilsAccordion>
+        <UtilsAccordion :title="'디자인 페이지'">
+          <div class="box-label-theme">
+            <label class="label-theme-type" v-for="designPage in designPages" :key="designPage">
+              <input type="radio" name="designPageType" id="" :value="designPage" v-model="designInfo.designPage" />
+              {{ designPage }}
+            </label>
+          </div>
+        </UtilsAccordion>
+        <UtilsAccordion :title="'예식 일시'">
+          <div class="box-input">
+            <p class="input-title">예식일</p>
+            <div class="wrap-datepicker">
+              <button class="btn-datepicker" @click="toggleDatePicker">
+                {{ formatedDate(weddingInfo.date) }}
+              </button>
+              <div class="box-datepicker">
+                <DatePicker 
+                  v-model="weddingInfo.date"
+                  :format="'yyyy-MM-dd'"
+                />
               </div>
             </div>
           </div>
-        </div>
-        <div class="wrap-accordion">
-          <button class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">인사말</p>
-            <i class="icon-chevron-down"></i>
-          </button>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-input">
-                <p class="input-title">인사말</p>
-                <!-- TODO: 텍스트 에디터 넣을거임 -->
-              </div>
+          <div class="box-input">
+            <p class="input-title">예식시간</p>
+            <UtilsSelectBox
+              :title=weddingInfo.time.ampm
+              :width="62"
+              isReverse
+            >
+              <button
+                v-for="ampm in ampmOptions" 
+                @click="onChangeAmpm(`${ ampm }`)" 
+              >
+                {{ ampm }}
+              </button>
+            </UtilsSelectBox>
+            <UtilsSelectBox
+              :title="weddingInfo.time.hour + '시'"
+              :width="68"
+              isReverse
+            >
+              <button
+                v-for="hour in hourOptions" 
+                @click="onChangeHour(`${ hour }`)" 
+              >
+                {{ hour }}시
+              </button>
+            </UtilsSelectBox>
+            <UtilsSelectBox
+              :title="weddingInfo.time.minute + '분'"
+              :width="68"
+              isReverse
+            >
+              <button
+                v-for="minute in minuteOptions" 
+                @click="onChangeMinute(`${ minute }`)" 
+              >
+                {{ minute }}분
+              </button>
+            </UtilsSelectBox>
+          </div>
+          <div class="box-input ai-center">
+            <p class="input-title">캘린더</p>
+            <label class="btn-toggle">
+              <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCalendar" />
+              <span class="circle"></span>
+            </label>
+          </div>
+          <div class="box-input ai-center">
+            <p class="input-title">디데이</p>
+            <label class="btn-toggle">
+              <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCountdown" />
+              <span class="circle"></span>
+            </label>
+          </div>
+        </UtilsAccordion>
+        <UtilsAccordion :title="'예식 장소'">
+          <div class="box-input">
+            <p class="input-title">주소</p>
+            <input class="input-l" type="text" v-model="weddingInfo.location.address" placeholder="예식 장소를 입력해주세요." />
+            <button class="btn-find">주소 검색</button>
+          </div>
+          <div class="box-input">
+            <p class="input-title">예식장 이름</p>
+            <input class="input-l" type="text" v-model="weddingInfo.location.name" placeholder="층과 홀을 입력해주세요." />
+          </div>
+          <div class="box-input">
+            <p class="input-title">층 / 홀</p>
+            <input class="input-l" type="text" v-model="weddingInfo.location.detail" placeholder="층과 홀을 입력해주세요." />
+          </div>
+          <div class="box-input">
+            <p class="input-title">연락처</p>
+            <input class="input-l" type="text" v-model="weddingInfo.location.number" placeholder="-없이 입력해주세요." />
+          </div>
+        </UtilsAccordion>
+
+        <UtilsAccordion title="계좌번호">
+          <div class="box-input">
+            <p class="input-title">신랑</p>
+          </div>
+          <div class="box-account">
+            <div class="box-input">
+              <input class="input-m" type="text" v-model="weddingInfo.groom.account.bank" placeholder="은행명" />
+              <input class="input-m" type="text" v-model="weddingInfo.groom.account.name" placeholder="예금주" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.groom.account.number" placeholder="계좌번호" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.groom.account.kakaoPay" placeholder="카카오 페이 연동" />
             </div>
           </div>
-        </div>
-        <div class="wrap-accordion">
-          <div class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">디자인 페이지</p>
-            <i class="icon-chevron-down"></i>
+          <div class="box-input ai-center jc-between">
+            <p class="input-title">신랑 아버지</p>
+            <label class="btn-toggle">
+              <input type="checkbox" name="" id="" v-model="weddingInfo.groom.parents[0].isUseAccount" />
+              <span class="circle"></span>
+            </label>
           </div>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-label-theme">
-                <label class="label-theme-type" v-for="designPage in designPages" :key="designPage">
-                  <input type="radio" name="mainVisualType" id="" :value="designPage" v-model="designInfo.designPage" />
-                  {{ designPage }}
-                </label>
-              </div>
-            </div>  
-          </div>
-        </div>
-        <div class="wrap-accordion">
-          <button class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">예식 일시</p>
-            <i class="icon-chevron-down"></i>
-          </button>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-input">
-                <p class="input-title">예식일</p>
-                <div class="wrap-datepicker">
-                  <button class="btn-datepicker" @click="toggleDatePicker">
-                    {{ formatedDate(weddingInfo.date) }}
-                  </button>
-                  <div class="box-datepicker">
-                    <DatePicker 
-                      v-model="weddingInfo.date"
-                      :format="'yyyy-MM-dd'"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="box-input">
-                <p class="input-title">예식시간</p>
-                <div class="wrap-select reverse" style="width: 62px;">
-                  <button 
-                    class="btn-select" 
-                    @click="toggleSelect"
-                  >
-                    {{ weddingInfo.time.ampm }}
-                  </button>
-                  <div class="options">
-                    <button
-                      v-for="ampm in ampmOptions" 
-                      @click="onChangeAmpm(`${ ampm }`)" 
-                    >
-                      {{ ampm }}
-                    </button>
-                  </div>
-                </div>
-                <div class="wrap-select reverse" style="width: 68px;">
-                  <button 
-                    class="btn-select" 
-                    @click="toggleSelect"
-                  >
-                    {{ weddingInfo.time.hour }}시
-                  </button>
-                  <div class="options" style="height: 200px; overflow-y: auto;">
-                    <button
-                      v-for="hour in hourOptions" 
-                      @click="onChangeHour(`${ hour }`)" 
-                    >
-                      {{ hour }}시
-                    </button>
-                  </div>
-                </div>
-                <div class="wrap-select reverse" style="width: 68px;">
-                  <button 
-                    class="btn-select" 
-                    @click="toggleSelect"
-                  >
-                    {{ weddingInfo.time.minute }}분
-                  </button>
-                  <div class="options" style="height: 200px; overflow-y: auto;">
-                    <button
-                      v-for="minute in minuteOptions" 
-                      @click="onChangeMinute(`${ minute }`)" 
-                    >
-                      {{ minute }}분
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="box-input ai-center">
-                <p class="input-title">캘린더</p>
-                <label class="btn-toggle">
-                  <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCalendar" />
-                  <span class="circle"></span>
-                </label>
-              </div>
-              <div class="box-input ai-center">
-                <p class="input-title">디데이</p>
-                <label class="btn-toggle">
-                  <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCountdown" />
-                  <span class="circle"></span>
-                </label>
-              </div>
+          <div class="box-account" v-show="weddingInfo.groom.parents[0].isUseAccount">
+            <div class="box-input">
+              <input class="input-m" type="text" v-model="weddingInfo.groom.parents[0].account.bank" placeholder="은행명" />
+              <input class="input-m" type="text" v-model="weddingInfo.groom.parents[0].account.name" placeholder="예금주" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.groom.parents[0].account.number" placeholder="계좌번호" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.groom.parents[0].account.kakaoPay" placeholder="카카오 페이 연동" />
             </div>
           </div>
-        </div>
-        <div class="wrap-accordion">
-          <button class="btn-accordion" @click="toggleAccordion">
-            <p class="accordion-title">예식 장소</p>
-            <i class="icon-chevron-down"></i>
-          </button>
-          <div class="box-accordion">
-            <div class="box-content">
-              <div class="box-input">
-                <p class="input-title">주소</p>
-                <input class="input-l" type="text" v-model="weddingInfo.location.address" placeholder="예식 장소를 입력해주세요." />
-                <button class="btn-find">주소 검색</button>
-              </div>
-              <div class="box-input">
-                <p class="input-title">예식장 이름</p>
-                <input class="input-l" type="text" v-model="weddingInfo.location.name" placeholder="층과 홀을 입력해주세요." />
-              </div>
-              <div class="box-input">
-                <p class="input-title">층 / 홀</p>
-                <input class="input-l" type="text" v-model="weddingInfo.location.detail" placeholder="층과 홀을 입력해주세요." />
-              </div>
-              <div class="box-input">
-                <p class="input-title">연락처</p>
-                <input class="input-l" type="text" v-model="weddingInfo.location.number" placeholder="-없이 입력해주세요." />
-              </div>
+          <div class="box-input ai-center jc-between">
+            <p class="input-title">신랑 어머니</p>
+            <label class="btn-toggle">
+              <input type="checkbox" name="" id="" v-model="weddingInfo.groom.parents[1].isUseAccount" />
+              <span class="circle"></span>
+            </label>
+          </div>
+          <div class="box-account" v-show="weddingInfo.groom.parents[1].isUseAccount">
+            <div class="box-input">
+              <input class="input-m" type="text" v-model="weddingInfo.groom.parents[1].account.bank" placeholder="은행명" />
+              <input class="input-m" type="text" v-model="weddingInfo.groom.parents[1].account.name" placeholder="예금주" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.groom.parents[1].account.number" placeholder="계좌번호" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.groom.parents[1].account.kakaoPay" placeholder="카카오 페이 연동" />
             </div>
           </div>
-        </div>
+          <div class="divider"></div>
+          <div class="box-input">
+            <p class="input-title">신부</p>
+          </div>
+          <div class="box-account">
+            <div class="box-input">
+              <input class="input-m" type="text" v-model="weddingInfo.bride.account.bank" placeholder="은행명" />
+              <input class="input-m" type="text" v-model="weddingInfo.bride.account.name" placeholder="예금주" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.bride.account.number" placeholder="계좌번호" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.bride.account.kakaoPay" placeholder="카카오 페이 연동" />
+            </div>
+          </div>
+          <div class="box-input ai-center jc-between">
+            <p class="input-title">신부 아버지</p>
+            <label class="btn-toggle">
+              <input type="checkbox" name="" id="" v-model="weddingInfo.bride.parents[0].isUseAccount" />
+              <span class="circle"></span>
+            </label>
+          </div>
+          <div class="box-account" v-show="weddingInfo.bride.parents[0].isUseAccount">
+            <div class="box-input">
+              <input class="input-m" type="text" v-model="weddingInfo.bride.parents[0].account.bank" placeholder="은행명" />
+              <input class="input-m" type="text" v-model="weddingInfo.bride.parents[0].account.name" placeholder="예금주" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.bride.parents[0].account.number" placeholder="계좌번호" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.bride.parents[0].account.kakaoPay" placeholder="카카오 페이 연동" />
+            </div>
+          </div>
+          <div class="box-input ai-center jc-between">
+            <p class="input-title">신부 어머니</p>
+            <label class="btn-toggle">
+              <input type="checkbox" name="" id="" v-model="weddingInfo.bride.parents[1].isUseAccount" />
+              <span class="circle"></span>
+            </label>
+          </div>
+          <div class="box-account" v-show="weddingInfo.bride.parents[1].isUseAccount">
+            <div class="box-input">
+              <input class="input-m" type="text" v-model="weddingInfo.bride.parents[1].account.bank" placeholder="은행명" />
+              <input class="input-m" type="text" v-model="weddingInfo.bride.parents[1].account.name" placeholder="예금주" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.bride.parents[1].account.number" placeholder="계좌번호" />
+            </div>
+            <div class="box-input">
+              <input class="input-l" type="text" v-model="weddingInfo.bride.parents[1].account.kakaoPay" placeholder="카카오 페이 연동" />
+            </div>
+          </div>
+        </UtilsAccordion>
+      </div>
+      <div class="box-order">
+        순서 바꾸기 들어갈 곳
       </div>
     </div>
   </div>
@@ -297,8 +327,7 @@
 import { useEditorStore } from '~/stores/editor';
 
 const editorStore = useEditorStore();
-const designInfo = ref(editorStore.designInfo);
-const weddingInfo = ref(editorStore.weddingInfo);
+const { weddingInfo, designInfo } = storeToRefs(editorStore);
 
 const introTypes = ['A', 'B', 'C'];
 const mainVisuals = ['A', 'B'];
@@ -353,36 +382,6 @@ const formatedDate = (date: Date) => {
 };
 
 onMounted(() => {
-  const wrapAccordion = document.querySelectorAll('.wrap-accordion');
-  wrapAccordion.forEach((accordion) => {
-    if (accordion.classList.contains('active')) {
-      const boxAccordion = accordion.querySelector('.box-accordion') as HTMLElement;
-      boxAccordion.style.height = `${boxAccordion.scrollHeight}px`;
-      boxAccordion.style.opacity = '1';
-      boxAccordion.style.pointerEvents = 'auto';
-      boxAccordion.style.overflowY = 'visible';
-    }
-  });
-  // 마우스 클릭시 wrap-select가 아니라면 wrap-select의 active 클래스를 제거
-  document.addEventListener('click', (event) => {
-    const wrapSelects = document.querySelectorAll('.wrap-select');
-    wrapSelects.forEach((wrapSelect) => {
-      if (!wrapSelect.contains(event.target as Node)) {
-        wrapSelect.classList.remove('active');
-        const options = wrapSelect.querySelector('.options') as HTMLElement;
-        if (options) {
-          options.classList.remove('active');
-        }
-      }
-      // 타겟이 options이면 active 클래스를 제거
-      if (wrapSelect.querySelector('.options')?.contains(event.target as Node)) {
-        wrapSelect.classList.remove('active');
-        const options = wrapSelect.querySelector('.options') as HTMLElement;
-        options.classList.remove('active');
-      }
-    });
-  });
-
   // box-datepicker가 아닌 곳을 클릭하면 box-datepicker의 active 클래스를 제거
   document.addEventListener('click', (event) => {
     const wrapDatePicker = document.querySelector('.wrap-datepicker');
@@ -437,26 +436,6 @@ const toggleSelect = (event: MouseEvent) => {
   const options = target.nextElementSibling as HTMLElement;
   target.classList.toggle('active');
   options.classList.toggle('active');
-};
-
-const toggleAccordion = (event: MouseEvent) => {
-  const target = event.currentTarget as HTMLElement;
-  const box = target.nextElementSibling as HTMLElement;
-  const parentElement = target.parentElement as HTMLElement;
-  parentElement.classList.toggle('active');
-  if (parentElement.classList.contains('active')) {
-    box.style.borderTop = '1px solid #dbdbdb';
-    box.style.height = `${box.scrollHeight}px`;
-    box.style.opacity = '1';
-    box.style.pointerEvents = 'auto';
-    box.style.overflowY = 'visible';
-  } else {
-    box.style.borderTop = 'none';
-    box.style.height = '0px';
-    box.style.opacity = '0';
-    box.style.pointerEvents = 'none';
-    box.style.overflowY = 'hidden';
-  }
 };
 
 const toggleDatePicker = () => {
@@ -603,5 +582,11 @@ const toggleDatePicker = () => {
       display: block;
     }
   }
+}
+.box-order{
+  align-self: flex-start;
+  background: #fff;
+  border-radius: 8px;
+  padding: 18px 24px;
 }
 </style>

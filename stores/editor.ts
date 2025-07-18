@@ -31,7 +31,8 @@ export const useEditorStore = defineStore('info', ()=>{
     calendar: {
       isShowCalendar: true,
       isShowCountdown: true,
-    }
+    },
+    isShowAccount: false,
   });
 
   const weddingInfo = ref<WeddingInfo>({
@@ -40,23 +41,37 @@ export const useEditorStore = defineStore('info', ()=>{
       familyName: '',
       relation: '딸',
       number: '',
-      bank: '',
-      account: '',
+      account: {
+        name: '',
+        number: '',
+        bank: '',
+        kakaoPay: null,
+      },
       parents:[
         {
           relation: '',
           name: '',
           number: '',
-          bank: '',
-          account: '',
+          account: {
+            name: '',
+            number: '',
+            bank: '',
+            kakaoPay: null,
+          },
+          isUseAccount: false,
           isDied: false,
         },
         {
           relation: '',
           name: '',
           number: '',
-          bank: '',
-          account: '',
+          account: {
+            name: '',
+            number: '',
+            bank: '',
+            kakaoPay: null,
+          },
+          isUseAccount: false,
           isDied: false,
         }
       ]
@@ -66,23 +81,37 @@ export const useEditorStore = defineStore('info', ()=>{
       familyName: '',
       relation: '아들',
       number: '',
-      bank: '',
-      account: '',
+      account: {
+        bank: '',
+        name: '',
+        number: '',
+        kakaoPay: null,
+      },
       parents:[
         {
           relation: '',
           name: '',
           number: '',
-          bank: '',
-          account: '',
+          account: {
+            name: '',
+            number: '',
+            bank: '',
+            kakaoPay: null,
+          },
+          isUseAccount: false,
           isDied: false,
         },
         {
           relation: '',
           name: '',
           number: '',
-          bank: '',
-          account: '',
+          account: {
+            name: '',
+            number: '',
+            bank: '',
+            kakaoPay: null,
+          },
+          isUseAccount: false,
           isDied: false,
         }
       ]

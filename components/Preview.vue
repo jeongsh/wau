@@ -27,7 +27,9 @@
       :date="formattedDate"
       :time="formattedTime"
     />
-    
+    <BlocksAccount
+      v-if="designInfo.isShowAccount"
+    />
   </div>
 </template>
 
@@ -40,7 +42,7 @@ const { designInfo, weddingInfo, formattedDate, formattedTime } = storeToRefs(ed
 
 const IntroComponent = computed(() => {
   const IntroType = designInfo.value.intro.type;
-  if(IntroType === 'none') {
+  if(IntroType !== 'none') {
     return defineAsyncComponent(() =>
       import(`@/components/blocks/intros/${IntroType}.vue`)
     );

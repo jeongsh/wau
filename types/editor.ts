@@ -21,6 +21,22 @@ export interface DesignInfo {
     isShowCalendar: boolean;
     isShowCountdown: boolean;
   }
+  isShowAccount: boolean;
+}
+
+interface Account{
+  name: string;
+  number: string;
+  bank: string;
+  kakaoPay: string | null;
+}
+interface Parents {
+  relation: string;
+  name: string;
+  number: string | null;
+  account: Account;
+  isUseAccount: boolean;
+  isDied: boolean;
 }
 
 export interface WeddingInfo {
@@ -29,33 +45,18 @@ export interface WeddingInfo {
     familyName: string;
     relation: string;
     number: string;
-    bank: string | null;
-    account: string | null;
-    parents: Array<{
-      relation: string;
-      name: string;
-      number: string | null;
-      bank: string | null;
-      account: string | null;
-      isDied: boolean;
-    }>;
+    account: Account;
+    parents: Array<Parents>;
   };
   groom: {
     name: string;
     familyName: string;
     relation: string;
     number: string;
-    bank: string | null;
-    account: string | null;
-    parents: Array<{
-      relation: string;
-      name: string;
-      number: string | null;
-      bank: string | null;
-      account: string | null;
-      isDied: boolean;
-    }>;
+    account: Account;
+    parents: Array<Parents>;
   };
+  
   date: Date;
   time: {
     ampm: string;
