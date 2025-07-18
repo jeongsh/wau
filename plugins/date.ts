@@ -3,6 +3,12 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 
+// 타입 정의
+interface DateUtils {
+  toKST: (utcDate: string | Date) => string
+  toKSTFormatted: (utcDate: string | Date, format?: string) => string
+}
+
 // dayjs 플러그인 확장은 딱 한 번만 (전역에서)
 dayjs.extend(utc)
 dayjs.extend(timezone)

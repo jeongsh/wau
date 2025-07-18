@@ -1,0 +1,10 @@
+model Notice {
+  no          Int       @id @default(autoincrement())
+  title       String    @default("") @db.VarChar(50)
+  content     String    @default("") @db.Text()
+  pick        Boolean   @default(false)
+  createdDt   DateTime  @default(now())
+  updatedDt   DateTime  @default(now())
+  deletedDt   DateTime?
+  deletedYn   Boolean   @default(false)
+}

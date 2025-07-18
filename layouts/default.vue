@@ -8,6 +8,7 @@
           <NuxtLink to="/editor">에디터</NuxtLink>
           <NuxtLink to="/view/1">완성화면</NuxtLink>
           <NuxtLink to="/payment">결제</NuxtLink>
+          <NuxtLink to="/help">고객센터</NuxtLink>
           <NuxtLink to="/dev">개발</NuxtLink>
         </nav>
         
