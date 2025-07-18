@@ -10,6 +10,7 @@
     </div>
     <div class="content">
       <h1>공지사항</h1>
+      {{notices}}
       <table>
         <thead>
           <tr>
@@ -28,7 +29,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const notices = ref([])
 const { $date } = useNuxtApp()
 

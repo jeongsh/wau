@@ -21,11 +21,12 @@ const notice = ref(<NoticeInfo>{
   deletedYn: false,
   title: '',
   content: '',
-  createdDt: null,
-  updatedDt: null,
+  createdDt: new Date(),
+  updatedDt: new Date(),
 })
 const createDt = ref('')
 const updatedDt = ref('')
+
 onMounted(async () => {
   notice.value = await $fetch('/api/help/notice', {
     method: 'GET',
@@ -33,8 +34,8 @@ onMounted(async () => {
       no: route.params.no
     }
   })
-  notice.value.createdDt = $date.toKST(notice.value.createdDt)
-  notice.value.updatedDt = $date.toKST(notice.value.updatedDt)
+  createDt.value = $date.toKST(notice.value.createdDt)
+  updatedDt.value = $date.toKST(notice.value.updatedDt)
 })
 
 </script>
