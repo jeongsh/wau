@@ -63,8 +63,7 @@ export const userLogin = async (event: any, email: string, password: string) => 
       path: '/',
     })
   } catch (error) {
-    console.error('jwt토큰 생성중 에러 발생')
-    console.error(error)
+    console.error(`jwt토큰 생성중 에러 발생: ${error}`)
     return {
       status: false,
       code: 500,
