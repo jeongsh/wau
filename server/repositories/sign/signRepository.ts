@@ -18,3 +18,15 @@ export const insertUser = async (data: Prisma.UserCreateInput) => {
     })
   })
 }
+
+export const selectOneUniqueUser = async (email: string) => {
+  return await prisma.user.findUnique({
+    select: {
+      uuid: true,
+      password: true,
+    },
+    where: {
+      email
+    }
+  })
+}

@@ -28,6 +28,12 @@
 <script setup lang="ts">
 import type { UserCreateDto } from '~/types/user'
 
+interface SignUpRes {
+  status: boolean,
+  message: string,
+  data?: {}
+}
+
 const user = reactive<UserCreateDto>({
   email: '',
   phoneNumber: '',
@@ -47,7 +53,8 @@ const signUp = async () => {
   }
 
   try {
-    const result = await $fetch('/api/sign/up', {
+
+    const result = await $fetch<SignUpRes>('/api/auth/sign-up', {
       method: 'POST',
       body: userObj,
     })
@@ -58,7 +65,7 @@ const signUp = async () => {
     } else {
       throw new Error(result.message);
     }
-  } catch (error) {
+  } catch (error: any) {
 
     if (error.statusCode >= 500) {
       const errorData = error.data
