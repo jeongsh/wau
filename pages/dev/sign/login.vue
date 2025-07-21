@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import { FetchError } from 'ofetch'
 
 interface SignIn {
   email: string,
@@ -44,28 +45,31 @@ const signIn = async () => {
     } else {
       throw new Error(result.message);
     }
-  } catch (error: any) {
-
-    if (error.statusCode >= 400) {
-      const errorData = error.data
-      const errorMsg = errorData.statusMessage
-      alert(errorMsg)
+  } catch (error: unknown) {
+    if (error instanceof FetchError) {
+      const errorCode = error.statusCode 
+      if (!!errorCode && errorCode >= 400) {
+        const errorData = error.data
+        const errorMsg = errorData.statusMessage
+        alert(errorMsg)
+        return
+      }
+      else if (!!errorCode && errorCode >= 500) {
+        const errorData = error.data
+        const errorMsg = errorData.statusMessage
+        alert(errorMsg)
+        return
+      }
+    }
+    else if (error instanceof Error) {
+      alert(error.message)
       return
     }
-    else if (error.statusCode >= 500) {
-      const errorData = error.data
-      const errorMsg = errorData.statusMessage
-      alert(errorMsg)
-      return
-    }
-
-    alert('로그인중 에러 발생')
   }
 }
 
 // 유저 정보 유효성 검사
 const isValidUser = (userLogin: SignIn) => {
-
   const fields = {
     email: '이메일을 입력해주세요.',
     password: '비밀번호를 입력해주세요.',

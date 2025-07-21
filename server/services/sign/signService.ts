@@ -2,6 +2,7 @@ import { insertUser, selectOneUniqueUser } from "~/server/repositories/sign/sign
 import { User, UserCreateDto } from "~/types/user"
 import { hashPassword, comparePassword } from "~/server/utils/auth"
 import { createJwtToken } from "~/server/utils/auth/jwt"
+import { H3Event } from "h3"
 
 export const createUser = async (userObj: UserCreateDto) => {
   try {
@@ -32,7 +33,7 @@ export const createUser = async (userObj: UserCreateDto) => {
   }
 }
 
-export const userLogin = async (event: any, email: string, password: string) => {
+export const userLogin = async (event: H3Event , email: string, password: string) => {
   const user = await selectOneUniqueUser(email)
   if (!user) {
     return {
@@ -74,6 +75,7 @@ export const userLogin = async (event: any, email: string, password: string) => 
   return {
     status: true,
     code: 200,
-    message: 'Login success'
+    message: 'Login success',
+    
   }
 }
