@@ -1,0 +1,11 @@
+model Faq {
+  no        Int       @id @default(autoincrement())
+  title     String    @default("") @db.VarChar(50)
+  content   String    @db.Text
+  pick      Boolean   @default(false)
+  type      String    @default("") @db.VarChar(50)
+  createdDt DateTime  @default(now())
+  updatedDt DateTime  @default(now())
+  deletedDt DateTime?
+  deletedYn Boolean   @default(false)
+}

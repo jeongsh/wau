@@ -1,90 +1,49 @@
 <template>
   <div class="body">
     <div class="header">
-      FAQ
+      고객센터
     </div>
     <div class="nav">
       <NuxtLink to="/help">공지사항</NuxtLink>
       <NuxtLink to="/help/faq">FAQ</NuxtLink>
       <NuxtLink to="/help/contact">문의하기</NuxtLink>
     </div>
+    <div class="content">
+      <h1>FAQ</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>제목</th>
+            <th>작성일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="faqs.length === 0">
+            <td colspan="3">등록된 FAQ가 없습니다.</td>
+          </tr>
+          <tr v-else v-for="(faq,index) in faqs" @click="detailFaq(faq.no)" :style="{ cursor: 'pointer' }" :key="faq.no">
+            <td>{{ index + 1 }}</td>
+            <td>{{ faq.title }}</td>
+            <td>{{ transferDate(faq.createdDt) }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <button @click="navigateTo('/help/faq/write')">FAQ 작성</button>
+    </div>
   </div>
 </template>
 
-<script setup>
-// import { User, UserCreateDto, UserUpdateDto, UserDeleteDto } from '~/types/user'
-
-const users = ref([])
-const userName = ref('')
-const userEmail = ref('')
-const userPhone = ref('')
-const nickname = ref('')
-const { $date } = useNuxtApp()
+<script setup lang="ts">
+import type { FaqInfo } from '~/types/faq'
+const faqs = ref([]) as Ref<FaqInfo[]>
+const { transferDate } = useDate()
 
 onMounted(async () => {
-  users.value = await $fetch('/api/users/user')
-  users.value.forEach(user => {
-    user.createdDt = $date.toKST(user.createdDt)
-    user.updatedDt = $date.toKST(user.updatedDt)
-  })
+  faqs.value = await $fetch('/api/help/faqs')
 })
 
-
-const addUser = async () => {
-  if (!userName.value || !userEmail.value || !userPhone.value) {
-    alert('이름과 이메일을 입력해주세요.')
-    return
-  }
-
-  const newUser = {
-    name: userName.value,
-    email: userEmail.value,
-    phoneNumber: userPhone.value
-  }
-
-  try {
-    const created = await $fetch('/api/users/user', {
-      method: 'POST',
-      body: newUser
-    })
-
-    // 서버 응답에 name/email이 없을 경우 수동으로 포함
-    const completeUser = {
-      id: created.id,
-      name: created.name || newUser.name,
-      email: created.email || newUser.email
-    }
-
-    users.value.push(completeUser)
-
-    // 입력창 초기화
-    userName.value = ''
-    userEmail.value = ''
-  } catch (error) {
-    console.error('사용자 추가 실패:', error)
-    alert('사용자 추가에 실패했습니다.')
-  }
-}
-
-const modifyUser = async (user) => {
-
-  const updatedUser = {
-    id: user.no,
-    name: user.name,
-    email: user.email
-  }
-
-  try {
-    await $fetch('/api/users/user', {
-      method: 'PATCH',
-      body: updatedUser
-    })
-
-    console.log('사용자 수정 성공')
-    // users 배열은 v-model로 바인딩되어 있기 때문에 따로 갱신할 필요 없음
-  } catch (error) {
-    console.error('사용자 수정 실패:', error)
-    alert('사용자 수정에 실패했습니다.')
-  }
+const detailFaq = (no: number) => {
+  navigateTo(`/help/faq/${no}`)
 }
 </script>

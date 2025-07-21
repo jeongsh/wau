@@ -1,4 +1,4 @@
-export interface Faq {
+export interface FaqInfo {
   no: number
   title: string
   content: string
@@ -6,7 +6,6 @@ export interface Faq {
   type: string
   createdDt: Date
   updatedDt: Date
-  modifiedDt?: Date
-  deletedDt?: Date
+  deletedDt?: Date | null
   deletedYn: boolean
 }
