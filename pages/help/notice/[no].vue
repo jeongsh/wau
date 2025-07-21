@@ -5,27 +5,18 @@
   <div>
     <h1>{{ notice.title }}</h1>
     <p>{{ notice.content }}</p>
-    <p>작성일: {{ notice.createdDt }}</p>
-    <p>수정일: {{ notice.updatedDt }}</p>
+    <p>작성일: {{ transferDate(notice.createdDt) }}</p>
+    <p>수정일: {{ transferDate(notice.updatedDt) }}</p>
   </div>
+  <button @click="navigateTo('/help')">목록으로</button>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import type { NoticeInfo } from '~/types/notice'
-const { $date } = useNuxtApp()
 const route = useRoute()
-const notice = ref(<NoticeInfo>{
-  no: 0,
-  pick: false,
-  deletedYn: false,
-  title: '',
-  content: '',
-  createdDt: new Date(),
-  updatedDt: new Date(),
-})
-const createDt = ref('')
-const updatedDt = ref('')
+const notice = ref(<NoticeInfo>{})
+const { transferDate } = useDate()
 
 onMounted(async () => {
   notice.value = await $fetch('/api/help/notice', {
@@ -34,8 +25,6 @@ onMounted(async () => {
       no: route.params.no
     }
   })
-  createDt.value = $date.toKST(notice.value.createdDt)
-  updatedDt.value = $date.toKST(notice.value.updatedDt)
 })
 
 </script>
