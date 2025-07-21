@@ -1,25 +1,136 @@
 <template>
   <section class="sec-account">
-    <div class="wrap-accordion">
-      <button class="btn-accordion" @click="toggleAccordion">신랑측</button>
-      <div class="box-accordion">
-        <div class="box-content">
-          <div
-            v-if="isAccountDataAvailable(weddingInfo.groom.account)" 
-            class="wrap-account"
+    <UtilsAccordion title="신랑측">
+      <div
+        v-if="isAccountDataAvailable(weddingInfo.groom.account)" 
+        class="wrap-account"
+      >
+        <div class="box-account">
+          <p class="account-name">{{ weddingInfo.groom.account.name }}</p>
+          <p class="account-number">{{ weddingInfo.groom.account.bank }} | {{ weddingInfo.groom.account.number }}</p>
+        </div>
+        <div class="box-btn">
+          <button
+            v-if="weddingInfo.groom.account.number"
+            class="btn-acount-copy"
           >
-            <div class="box-account">
-              <p class="account-name">{{ weddingInfo.groom.name }}</p>
-              <p class="account-number">{{ weddingInfo.groom.account.number }}</p>
-              <p class="bank-name">{{ weddingInfo.groom.account.bank }}</p>
-            </div>
-            <p class="account-kakaopay" v-if="weddingInfo.groom.account.kakaoPay">
-              카카오페이: {{ weddingInfo.groom.account.kakaoPay }}
-            </p>
-          </div>
+            <span class="icon-copy"></span>
+            <span class="text">복사</span>
+          </button>
+          <button class="btn-account-kakaopay" v-if="weddingInfo.groom.account.kakaoPay">
+            카카오페이 복사하기</button>
         </div>
       </div>
-    </div>
+
+      <div
+        v-if="isAccountDataAvailable(weddingInfo.groom.parents[0].account) && weddingInfo.groom.parents[0].isUseAccount" 
+        class="wrap-account"
+      >
+        <div class="box-account">
+          <p class="account-name">{{ weddingInfo.groom.parents[0].account.name }}</p>
+          <p class="account-number">{{ weddingInfo.groom.parents[0].account.bank }} | {{ weddingInfo.groom.parents[0].account.number }}</p>
+        </div>
+        <div class="box-btn">
+          <button
+            v-if="weddingInfo.groom.parents[0].account.number"
+            class="btn-acount-copy"
+          >
+            <span class="icon-copy"></span>
+            <span class="text">복사</span>
+          </button>
+          <button class="btn-account-kakaopay" v-if="weddingInfo.groom.parents[0].account.kakaoPay">
+            카카오페이 복사하기
+          </button>
+        </div>
+      </div>
+      <div
+        v-if="isAccountDataAvailable(weddingInfo.groom.parents[1].account) && weddingInfo.groom.parents[1].isUseAccount" 
+        class="wrap-account"
+      >
+        <div class="box-account">
+          <p class="account-name">{{ weddingInfo.groom.parents[1].account.name }}</p>
+          <p class="account-number">{{ weddingInfo.groom.parents[1].account.bank }} | {{ weddingInfo.groom.parents[1].account.number }}</p>
+        </div>
+        <div class="box-btn">
+          <button
+            v-if="weddingInfo.groom.parents[1].account.number"
+            class="btn-acount-copy"
+          >
+            <span class="icon-copy"></span>
+            <span class="text">복사</span>
+          </button>
+          <button class="btn-account-kakaopay" v-if="weddingInfo.groom.parents[1].account.kakaoPay">
+            카카오페이 복사하기
+          </button>
+        </div>
+      </div>
+    </UtilsAccordion>
+    <UtilsAccordion title="신부측">
+      <div
+        v-if="isAccountDataAvailable(weddingInfo.bride.account)" 
+        class="wrap-account"
+      >
+        <div class="box-account">
+          <p class="account-name">{{ weddingInfo.bride.account.name }}</p>
+          <p class="account-number">{{ weddingInfo.bride.account.bank }} | {{ weddingInfo.bride.account.number }}</p>
+        </div>
+        <div class="box-btn">
+          <button
+            v-if="weddingInfo.bride.account.number"
+            class="btn-acount-copy"
+          >
+            <span class="icon-copy"></span>
+            <span class="text">복사</span>
+          </button>
+          <button class="btn-account-kakaopay" v-if="weddingInfo.bride.account.kakaoPay">
+            카카오페이 복사하기</button>
+        </div>
+      </div>
+
+      <div
+        v-if="isAccountDataAvailable(weddingInfo.bride.parents[0].account) && weddingInfo.bride.parents[0].isUseAccount" 
+        class="wrap-account"
+      >
+        <div class="box-account">
+          <p class="account-name">{{ weddingInfo.bride.parents[0].account.name }}</p>
+          <p class="account-number">{{ weddingInfo.bride.parents[0].account.bank }} | {{ weddingInfo.bride.parents[0].account.number }}</p>
+        </div>
+        <div class="box-btn">
+          <button
+            v-if="weddingInfo.bride.parents[0].account.number"
+            class="btn-acount-copy"
+          >
+            <span class="icon-copy"></span>
+            <span class="text">복사</span>
+          </button>
+          <button class="btn-account-kakaopay" v-if="weddingInfo.bride.parents[0].account.kakaoPay">
+            카카오페이 복사하기
+          </button>
+        </div>
+      </div>
+
+      <div
+        v-if="isAccountDataAvailable(weddingInfo.bride.parents[1].account) && weddingInfo.bride.parents[1].isUseAccount" 
+        class="wrap-account"
+      >
+        <div class="box-account">
+          <p class="account-name">{{ weddingInfo.bride.parents[1].account.name }}</p>
+          <p class="account-number">{{ weddingInfo.bride.parents[1].account.bank }} | {{ weddingInfo.bride.parents[1].account.number }}</p>
+        </div>
+        <div class="box-btn">
+          <button
+            v-if="weddingInfo.bride.parents[1].account.number"
+            class="btn-acount-copy"
+          >
+            <span class="icon-copy"></span>
+            <span class="text">복사</span>
+          </button>
+          <button class="btn-account-kakaopay" v-if="weddingInfo.bride.parents[1].account.kakaoPay">
+            카카오페이 복사하기
+          </button>
+        </div>
+      </div>
+    </UtilsAccordion>
   </section>
 </template>
 
@@ -28,39 +139,6 @@ import { useEditorStore } from '~/stores/editor';
 
 const editorStore = useEditorStore();
 const { designInfo, weddingInfo } = storeToRefs(editorStore);
-onMounted(() => {
-  const wrapAccordion = document.querySelectorAll('.wrap-accordion');
-  wrapAccordion.forEach((accordion) => {
-    if (accordion.classList.contains('active')) {
-      const boxAccordion = accordion.querySelector('.box-accordion') as HTMLElement;
-      boxAccordion.style.height = `${boxAccordion.scrollHeight}px`;
-      boxAccordion.style.opacity = '1';
-      boxAccordion.style.pointerEvents = 'auto';
-      boxAccordion.style.overflowY = 'visible';
-    }
-  });
-});
-
-const toggleAccordion = (event: MouseEvent) => {
-  const target = event.currentTarget as HTMLElement;
-  const box = target.nextElementSibling as HTMLElement;
-  const parentElement = target.parentElement as HTMLElement;
-  parentElement.classList.toggle('active');
-  if (parentElement.classList.contains('active')) {
-    box.style.borderTop = '1px solid #dbdbdb';
-    box.style.height = `${box.scrollHeight}px`;
-    box.style.opacity = '1';
-    box.style.pointerEvents = 'auto';
-    box.style.overflowY = 'visible';
-  } else {
-    box.style.borderTop = 'none';
-    box.style.height = '0px';
-    box.style.opacity = '0';
-    box.style.pointerEvents = 'none';
-    box.style.overflowY = 'hidden';
-  }
-};
-
 const isAccountDataAvailable = ( account: { number: string, bank: string, name: string }) => {
   return account && account.number && account.bank && account.name;
 };
@@ -70,5 +148,51 @@ const isAccountDataAvailable = ( account: { number: string, bank: string, name: 
 .sec-account{
   padding: 24px;
   background: var(--light-color);
+}
+.wrap-account{
+  padding: 16px;
+  background: white;
+  border: 1px solid #ededed;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  &:last-child{
+    margin-bottom: 0;
+  }
+}
+.box-account{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  p{
+    font-size: 0.8em;
+  }
+}
+.box-btn{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  button{
+    flex: 1;
+    border: 1px solid #ededed;
+    border-radius: 8px;
+    height: 40px;
+    font-size: 0.9em;
+  }
+}
+:deep(.wrap-accordion) {
+  .btn-accordion{
+    height: 36px;
+    font-size: 1em;
+    padding-top: 4px;
+    .accordion-title{
+      font-size: 0.8em;
+    }
+  }
+  .box-accordion{
+    .box-content{
+      padding: 8px 12px 12px 12px;
+    }
+  }
 }
 </style>

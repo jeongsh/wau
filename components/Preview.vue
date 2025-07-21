@@ -27,6 +27,9 @@
       :date="formattedDate"
       :time="formattedTime"
     />
+    <BlocksContact
+      v-if="designInfo.isShowContact"
+    />
     <BlocksAccount
       v-if="designInfo.isShowAccount"
     />

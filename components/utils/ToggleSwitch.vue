@@ -25,6 +25,7 @@ defineProps({
   border: 1px solid #DBDBDB;
   z-index: 90;
   cursor: pointer;
+  display: block;
   input {
     display: none;
   }

@@ -200,7 +200,33 @@
           </div>
         </UtilsAccordion>
 
-        <UtilsAccordion title="계좌번호">
+        <UtilsAccordion title="연락처" v-model:isSwitch="designInfo.isShowContact">
+          <div class="box-input">
+            <p class="input-title">신랑 연락처</p>
+            <input class="input-l" type="text" v-model="weddingInfo.groom.number" placeholder="-없이 입력해주세요." />
+          </div>
+          <div class="box-input" v-if="!weddingInfo.groom.parents[0].isDied">
+            <p class="input-title">신랑 아버지</p>
+            <input class="input-l" type="text" v-model="weddingInfo.groom.parents[0].number" placeholder="-없이 입력해주세요." />
+          </div>
+          <div class="box-input" v-if="!weddingInfo.groom.parents[1].isDied">
+            <p class="input-title">신랑 어머니</p>
+            <input class="input-l" type="text" v-model="weddingInfo.groom.parents[1].number" placeholder="-없이 입력해주세요." />
+          </div>
+          <div class="box-input">
+            <p class="input-title">신부 연락처</p>
+            <input class="input-l" type="text" v-model="weddingInfo.bride.number" placeholder="-없이 입력해주세요." />
+          </div>
+          <div class="box-input">
+            <p class="input-title" v-if="!weddingInfo.bride.parents[0].isDied">신부 아버지</p>
+            <input class="input-l" type="text" v-model="weddingInfo.bride.parents[0].number" placeholder="-없이 입력해주세요." />
+          </div>
+          <div class="box-input" v-if="!weddingInfo.bride.parents[1].isDied">
+            <p class="input-title">신부 어머니</p>
+            <input class="input-l" type="text" v-model="weddingInfo.bride.parents[1].number" placeholder="-없이 입력해주세요." />
+          </div>
+        </UtilsAccordion>
+        <UtilsAccordion title="계좌번호" v-model:isSwitch="designInfo.isShowAccount">
           <div class="box-input">
             <p class="input-title">신랑</p>
           </div>

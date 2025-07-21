@@ -21,6 +21,7 @@ export interface DesignInfo {
     isShowCalendar: boolean;
     isShowCountdown: boolean;
   }
+  isShowContact: boolean;
   isShowAccount: boolean;
 }
 

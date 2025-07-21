@@ -1,9 +1,16 @@
 <template>
   <div class="wrap-accordion">
-    <button class="btn-accordion" @click="toggle">
-      <span class="accordion-title">{{ title }}</span>
-      <i class="icon-chevron-down" :class="{ open: isOpen }"></i>
-    </button>
+    <div class="header-accordion">
+      <button class="btn-accordion" @click="toggle">
+        <span class="accordion-title">{{ title }}</span>
+        <i class="icon-chevron-down" :class="{ open: isOpen }"></i>
+      </button>
+      <UtilsToggleSwitch
+        v-if="props.isSwitch !== null"
+        :modelValue="props.isSwitch"
+        @update:modelValue="emit('update:isSwitch', $event)"
+      />
+    </div>
     <div
       ref="contentBox"
       class="box-accordion"
@@ -20,10 +27,14 @@
 <script setup>
 const props = defineProps({
   title: String,
-  isOpen: Boolean // optional: for v-model support
+  isOpen: Boolean ,
+  isSwitch: {
+    type: Boolean,
+    default: null
+  }
 })
 
-const emit = defineEmits(['update:isOpen'])
+const emit = defineEmits(['update:isOpen', 'update:isSwitch'])
 
 const isOpen = ref(props.isOpen ?? false)
 const contentBox = ref(null)
@@ -95,14 +106,20 @@ watch(isOpen, () => updateHeight())
   margin: 0 auto 16px auto;
   background: #fff;
   border-radius: 8px;
-  .btn-accordion {
-    width: 100%;
+  .header-accordion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 56px;
+    padding: 0 16px;
+  }
+  .btn-accordion {
+    flex:1;
+    height: 100%;
     border: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
     cursor: pointer;
     .accordion-title {
       font-size: 16px;

@@ -32,6 +32,7 @@ export const useEditorStore = defineStore('info', ()=>{
       isShowCalendar: true,
       isShowCountdown: true,
     },
+    isShowContact: false,
     isShowAccount: false,
   });
 
