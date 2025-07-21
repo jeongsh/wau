@@ -16,9 +16,10 @@ export const selectAllFaq = async () => {
     where: {
       deletedYn: false
     },
-    orderBy: {
-      createdDt: 'desc'
-    }
+    orderBy: [
+      { pick: 'desc' },  // 중요 FAQ 먼저
+      { updatedDt: 'desc' }  // 최신순
+    ]
   })
 }
 

@@ -6,16 +6,6 @@
     <div class="content">
       <form @submit.prevent="submitFaq">
         <div class="form-group">
-          <label for="type">분류</label>
-          <input 
-            type="text" 
-            id="type" 
-            v-model="faq.type" 
-            placeholder="분류를 입력하세요 (예: 계정, 결제, 사용법)"
-          >
-        </div>
-        
-        <div class="form-group">
           <label for="title">제목</label>
           <input 
             type="text" 
@@ -36,7 +26,19 @@
             required
           ></textarea>
         </div>
-        
+        <div class="form-group">
+          <label for="type">카테고리</label>
+          <select 
+            id="type" 
+            v-model="faq.type"
+            required
+          >
+            <option value="" disabled>선택하세요</option>
+            <option value="most">많이하는 질문</option>
+            <option value="essential">필수 확인 질문</option>
+            <option value="general">일반 질문</option>
+          </select>
+        </div>
         <div class="form-group">
           <label>
             <input 

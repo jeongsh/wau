@@ -35,25 +35,17 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import type { FaqInfo } from '~/types/faq'
-
 const route = useRoute()
-const faq = ref<FaqInfo>({} as FaqInfo)
+const faq = ref(<FaqInfo>{})
 const { transferDate } = useDate()
 
 onMounted(async () => {
-  try {
-    console.log('Fetching FAQ with ID:', route.params.no)
-    faq.value = await $fetch('/api/help/faq', {
-      method: 'GET',
-      params: {
-        no: route.params.no
-      }
-    })
-  } catch (error) {
-    console.error('FAQ 조회 실패:', error)
-    alert('FAQ를 불러오는데 실패했습니다.')
-    navigateTo('/help/faq')
-  }
+  faq.value = await $fetch('/api/help/faq', {
+    method: 'GET',
+    params: {
+      no: route.params.no
+    }
+  })
 })
 
 const goBack = () => {

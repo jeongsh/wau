@@ -15,9 +15,10 @@ export const selectAllNotice = async () => {
     where: {
       deletedYn: false
     },
-    orderBy: {
-      createdDt: 'desc'
-    }
+    orderBy: [
+      { pick: 'desc' },  // 중요 공지 먼저
+      { updatedDt: 'desc' }
+    ]
   })
 }
 
