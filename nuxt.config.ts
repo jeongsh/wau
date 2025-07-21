@@ -6,9 +6,7 @@ export default defineNuxtConfig({
     jwtSecretKey: process.env.JWT_SECRET_KEY,
   },
   modules: [// '@prisma/nuxt',
-    '@pinia/nuxt', 
-    'nuxt-tiptap-editor'
-  ],
+  '@pinia/nuxt', 'nuxt-tiptap-editor', '@formkit/auto-animate/nuxt', 'nuxt-swiper'],
   //scss
   css: [
     '@/assets/scss/common.scss'

@@ -8,7 +8,9 @@
       `theme-${designInfo.themeColor}`,
       `${designInfo.fontStyle}`,
       `fontsize-${designInfo.fontSize}`,
-    ]">
+    ]"
+    v-auto-animate
+  >
     <section class="sec-main">
       <component :is="MainVisualComponent" :designInfo="designInfo" :weddingInfo="weddingInfo" />
       <component 
@@ -32,6 +34,10 @@
     />
     <BlocksAccount
       v-if="designInfo.isShowAccount"
+    />
+    <component 
+      v-if="designInfo.gallery.isShowGallery" 
+      :is="GalleryComponent" 
     />
   </div>
 </template>
@@ -64,6 +70,16 @@ const DesignPagesComponent = computed(() => {
   return defineAsyncComponent(() =>
     import(`@/components/blocks/designPages/${designType}.vue`)
   );
+});
+
+const GalleryComponent = computed(() => {
+  const galleryType = designInfo.value.gallery.galleryType || 'Swipe';
+  if (designInfo.value.gallery.isShowGallery) {
+    return defineAsyncComponent(() =>
+      import(`@/components/blocks/Gallery/${galleryType}.vue`)
+    );
+  }
+  return null;
 });
 </script>
 

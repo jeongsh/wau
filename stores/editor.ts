@@ -34,6 +34,11 @@ export const useEditorStore = defineStore('info', ()=>{
     },
     isShowContact: false,
     isShowAccount: false,
+    gallery: {
+      isShowGallery: false,
+      galleryType: 'Swipe',
+      images: null,
+    },
   });
 
   const weddingInfo = ref<WeddingInfo>({

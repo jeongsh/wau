@@ -23,6 +23,11 @@ export interface DesignInfo {
   }
   isShowContact: boolean;
   isShowAccount: boolean;
+  gallery: {
+    isShowGallery: boolean;
+    galleryType: string;
+    images: string[] | null;
+  }
 }
 
 interface Account{

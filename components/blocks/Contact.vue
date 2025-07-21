@@ -1,5 +1,5 @@
 <template>
-  <section class="sec-contact">
+  <section class="sec-contact" v-auto-animate>
     <button class="btn-contact" @click="toggleModal">
       연락하기
     </button>
@@ -89,7 +89,7 @@ const toggleModal = () => {
 }
 
 .modal{
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

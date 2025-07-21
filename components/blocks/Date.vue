@@ -1,5 +1,5 @@
 <template>
-  <section class="sec-date">
+  <section class="sec-date" v-auto-animate>
     <div v-if="designInfo.calendar.isShowCalendar">
       <h3 class="amphora">WEDDING DAY</h3>
       <p class="date">

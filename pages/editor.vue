@@ -1,5 +1,8 @@
 <template>
-  <div class="wrap-editor">
+  <div class="wrap-editor" v-auto-animate>
+    <div class="modal-loading" v-if="isLoading">
+      로딩중...
+    </div>
     <div class="container d-flex ai-center g-32">
       <div class="wrap-preview">
         <div class="box-preview">
@@ -100,7 +103,7 @@
             <p class="input-title">커버 이미지</p>
           </div>
           <div class="box-input">
-            <input type="file" @change="onImageChange" accept="image/*" />
+            <input type="file" @change="onMainVisualChange" accept="image/*" />
           </div>
         </UtilsAccordion>
         <UtilsAccordion :title="'인사말'">
@@ -323,9 +326,42 @@
             </div>
           </div>
         </UtilsAccordion>
-      </div>
-      <div class="box-order">
-        순서 바꾸기 들어갈 곳
+        <UtilsAccordion title="갤러리" v-model:isSwitch="designInfo.gallery.isShowGallery">
+          <div class="box-input">
+            <p class="input-title">갤러리 타입</p>
+            <div class="box-btn-type">
+              <button
+                v-for="galleryType in galleryTypes" 
+                @click="designInfo.gallery.galleryType = galleryType" 
+                :key="galleryType"
+                :class="`btn-gallery-type ${designInfo.gallery.galleryType === galleryType ? 'active' : ''}`"
+                class="btn-gallery-type"
+              >
+                {{ galleryType }}
+              </button>
+            </div>
+          </div>
+          <div class="box-input">
+            <p class="input-title" style="width: auto">이미지 업로드</p>
+          </div>
+          <div class="wrap-thumbnail">
+            <div class="box-thumbnail" v-for="(image, index) in designInfo.gallery.images">
+              <img
+                :key="index"
+                :src="image"
+                alt=""
+                class="gallery-thumnail"
+              >
+              <button class="btn-delete-thumbnail" @click="onDeleteGalleryImage(index)">
+                x
+              </button>
+            </div>
+            <label class="label-upload-thumbnail">
+              <input type="file" multiple @change="onGalleryImageChange" accept="image/*" />
+              +
+            </label>
+          </div>
+        </UtilsAccordion>
       </div>
     </div>
   </div>
@@ -341,6 +377,7 @@ const introTypes = ['A', 'B', 'C'];
 const mainVisuals = ['A', 'B'];
 const designPages = ['A', 'B', 'C'];
 const themeColors = ['blue', 'orange', 'pink', 'yellow','brown', 'charcoal'];
+const galleryTypes = ['Swipe', 'Grid'];
 const fontStyles = [
   {
     fontFamily: 'pretendard',
@@ -389,6 +426,9 @@ const formatedDate = (date: Date) => {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 };
 
+const isLoading = ref(true);
+
+
 onMounted(() => {
   // box-datepicker가 아닌 곳을 클릭하면 box-datepicker의 active 클래스를 제거
   document.addEventListener('click', (event) => {
@@ -402,13 +442,17 @@ onMounted(() => {
       datePicker.classList.remove('active');
     }
   });
+
+  nextTick(() => {
+    isLoading.value = false;
+  });
 });
 
 const onChangeIntro = () => {
   designInfo.value.intro.isShowIntro = true;
 };
 
-const onImageChange = (event: Event) => {
+const onMainVisualChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files[0]) {
     const reader = new FileReader();
@@ -416,6 +460,31 @@ const onImageChange = (event: Event) => {
       designInfo.value.mainVisual.image = e.target?.result as string;
     };
     reader.readAsDataURL(target.files[0]);
+  }
+};
+
+const onGalleryImageChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files) {
+    // designInfo.value.gallery.images에 push
+    const files = Array.from(target.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (designInfo.value.gallery.images) {
+          designInfo.value.gallery.images.push(e.target?.result as string);
+        } else {
+          designInfo.value.gallery.images = [e.target?.result as string];
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+};
+
+const onDeleteGalleryImage = (index: number) => {
+  if (designInfo.value.gallery.images) {
+    designInfo.value.gallery.images.splice(index, 1);
   }
 };
 
@@ -446,6 +515,18 @@ const toggleDatePicker = () => {
 </script>
 
 <style lang="scss" scoped>
+.modal-loading{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
 .wrap-editor {
   width: 100%;
   height: 100vh;
@@ -604,5 +685,72 @@ const toggleDatePicker = () => {
   background: #fff;
   border-radius: 8px;
   padding: 18px 24px;
+}
+.box-btn-type{
+  display: flex;
+  gap: 8px;
+  .btn-gallery-type{
+    flex: 1;
+    height: 42px;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    background: #f4f3f0;
+    color: #2b2b2b;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    &.active{
+      background: #fff;
+      border-color: #2b2b2b;
+    }
+  }
+}
+.wrap-thumbnail{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+  .box-thumbnail{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .gallery-thumbnail{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  .btn-delete-thumbnail{
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .label-upload-thumbnail{
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f3f0;
+    border: 1px dashed #dbdbdb;
+    border-radius: 8px;
+    cursor: pointer;
+    input[type="file"]{
+      display: none;
+    }
+  }
 }
 </style>

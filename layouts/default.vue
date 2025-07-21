@@ -31,6 +31,7 @@ header{
   height: 56px;
   background: #fff;
   border-bottom: 1px solid #EDEDED;
+  z-index: 10;
   .container{
     height: 100%;
   }
