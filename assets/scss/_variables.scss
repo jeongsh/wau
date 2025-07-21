@@ -4,3 +4,38 @@
   --thick-color: rgb(235, 242, 245);
   --light-color: rgb(248, 248, 248);
 }
+
+.theme-orange {
+  --main-bg-color: rgb(255, 243, 230);    /* 따뜻한 밝은 오렌지 */
+  --primary-color: rgb(242, 153, 74);     /* 오렌지 */
+  --thick-color: rgb(255, 229, 198);      /* 더 연한 오렌지 */
+  --light-color: rgb(255, 248, 240);      /* 라이트 크림 */
+}
+
+.theme-yellow {
+  --main-bg-color: rgb(255, 250, 223);    /* 따뜻한 연노랑 */
+  --primary-color: rgb(246, 181, 53);     /* 머스터드 옐로우 */
+  --thick-color: rgb(255, 245, 207);      /* 더 연한 노랑 */
+  --light-color: rgb(255, 252, 240);      /* 라이트 크림 */
+}
+
+.theme-pink {
+  --main-bg-color: rgb(255, 241, 245);    /* 연한 핑크 */
+  --primary-color: rgb(233, 104, 120);    /* 코랄 핑크 */
+  --thick-color: rgb(255, 223, 231);      /* 더 연한 코랄 */
+  --light-color: rgb(255, 248, 251);      /* 라이트 핑크 */
+}
+
+.theme-brown {
+  --main-bg-color: rgb(245, 234, 223);    /* 밝은 베이지 */
+  --primary-color: rgb(168, 108, 57);     /* 카라멜 브라운 */
+  --thick-color: rgb(235, 207, 170);      /* 더 연한 브라운 */
+  --light-color: rgb(251, 243, 235);      /* 라이트 베이지 */
+}
+
+.theme-charcoal {
+  --main-bg-color: rgb(50, 54, 57);      /* 짙은 차콜 */
+  --primary-color: rgb(90, 94, 98);      /* 밝은 차콜 */
+  --thick-color: rgb(180, 183, 186);     /* 더 연한 그레이 */
+  --light-color: rgb(230, 230, 230);     /* 밝은 회색 */
+}

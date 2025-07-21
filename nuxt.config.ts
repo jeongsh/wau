@@ -5,12 +5,15 @@ export default defineNuxtConfig({
   runtimeConfig: {
     jwtSecretKey: process.env.JWT_SECRET_KEY,
   },
-  modules: [
-    '@pinia/nuxt'
-    // '@prisma/nuxt',
+  modules: [// '@prisma/nuxt',
+    '@pinia/nuxt', 
+    'nuxt-tiptap-editor'
   ],
   //scss
   css: [
     '@/assets/scss/common.scss'
   ],
+  tiptap: {
+    prefix: 'Tiptap',
+  },
 })

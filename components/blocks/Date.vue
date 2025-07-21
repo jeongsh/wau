@@ -71,8 +71,9 @@ const calendarAttrs = computed(() => {
     {
       key: 'wedding',
       highlight: {
-        color: '#F87171', // 원하는 색상
-        fillMode: 'solid',
+        color: 'var(--primary-color)', // 원하는 색상
+        fillMode: 'solid', // 채우기 모드
+        
       },
       dates: props.weddingInfo.date,
       popover: {
@@ -120,5 +121,12 @@ const dDay = computed(() => {
   padding: 120px 0;
   background: var(--thick-color);
   text-align: center;
+}
+
+/* 캘린더 내부 활성 날짜 강제 스타일 */
+:deep(.vc-highlight),
+:deep(.vc-day-content.is-selected) {
+  background: var(--primary-color) !important;
+  color: #fff !important;
 }
 </style>

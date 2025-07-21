@@ -106,7 +106,7 @@
         <UtilsAccordion :title="'인사말'">
           <div class="box-input">
             <p class="input-title">인사말</p>
-            <!-- TODO: 텍스트 에디터 넣을거임 -->
+            <UtilsTiptapEditor v-model="designInfo.greeting" />
           </div>
         </UtilsAccordion>
         <UtilsAccordion :title="'디자인 페이지'">
@@ -314,7 +314,7 @@ const { weddingInfo, designInfo } = storeToRefs(editorStore);
 const introTypes = ['A', 'B', 'C'];
 const mainVisuals = ['A', 'B'];
 const designPages = ['A', 'B', 'C'];
-const themeColors = ['blue', 'green', 'pink', 'purple'];
+const themeColors = ['blue', 'orange', 'pink', 'yellow','brown', 'charcoal'];
 const fontStyles = [
   {
     fontFamily: 'pretendard',
@@ -508,6 +508,21 @@ const toggleDatePicker = () => {
       border: 1px solid #dbdbdb;
       &.blue{
         background: linear-gradient(135deg, rgb(215, 228, 235), rgb(107, 153, 176));
+      }
+      &.orange{
+        background: linear-gradient(135deg, rgb(255, 224, 204), rgb(255, 153, 102));
+      }
+      &.pink{
+        background: linear-gradient(135deg, rgb(255, 224, 236), rgb(255, 153, 204));
+      }
+      &.yellow{
+        background: linear-gradient(135deg, rgb(255, 255, 204), rgb(255, 204, 102));
+      }
+      &.brown{
+        background: linear-gradient(135deg, rgb(230, 220, 210), rgb(150, 120, 100));
+      }
+      &.charcoal{
+        background: linear-gradient(135deg, rgb(220, 220, 220), rgb(100, 100, 100));
       }
       input{
         display: none;
