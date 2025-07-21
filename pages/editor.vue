@@ -173,17 +173,11 @@
           </div>
           <div class="box-input ai-center">
             <p class="input-title">캘린더</p>
-            <label class="btn-toggle">
-              <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCalendar" />
-              <span class="circle"></span>
-            </label>
+            <UtilsToggleSwitch v-model="designInfo.calendar.isShowCalendar" />
           </div>
           <div class="box-input ai-center">
             <p class="input-title">디데이</p>
-            <label class="btn-toggle">
-              <input type="checkbox" name="" id="" v-model="designInfo.calendar.isShowCountdown" />
-              <span class="circle"></span>
-            </label>
+            <UtilsToggleSwitch v-model="designInfo.calendar.isShowCountdown" />
           </div>
         </UtilsAccordion>
         <UtilsAccordion :title="'예식 장소'">
@@ -224,10 +218,7 @@
           </div>
           <div class="box-input ai-center jc-between">
             <p class="input-title">신랑 아버지</p>
-            <label class="btn-toggle">
-              <input type="checkbox" name="" id="" v-model="weddingInfo.groom.parents[0].isUseAccount" />
-              <span class="circle"></span>
-            </label>
+            <UtilsToggleSwitch v-model="weddingInfo.groom.parents[0].isUseAccount" />
           </div>
           <div class="box-account" v-show="weddingInfo.groom.parents[0].isUseAccount">
             <div class="box-input">
@@ -243,10 +234,7 @@
           </div>
           <div class="box-input ai-center jc-between">
             <p class="input-title">신랑 어머니</p>
-            <label class="btn-toggle">
-              <input type="checkbox" name="" id="" v-model="weddingInfo.groom.parents[1].isUseAccount" />
-              <span class="circle"></span>
-            </label>
+            <UtilsToggleSwitch v-model="weddingInfo.groom.parents[1].isUseAccount" />
           </div>
           <div class="box-account" v-show="weddingInfo.groom.parents[1].isUseAccount">
             <div class="box-input">
@@ -278,10 +266,7 @@
           </div>
           <div class="box-input ai-center jc-between">
             <p class="input-title">신부 아버지</p>
-            <label class="btn-toggle">
-              <input type="checkbox" name="" id="" v-model="weddingInfo.bride.parents[0].isUseAccount" />
-              <span class="circle"></span>
-            </label>
+            <UtilsToggleSwitch v-model="weddingInfo.bride.parents[0].isUseAccount" />
           </div>
           <div class="box-account" v-show="weddingInfo.bride.parents[0].isUseAccount">
             <div class="box-input">
@@ -297,10 +282,7 @@
           </div>
           <div class="box-input ai-center jc-between">
             <p class="input-title">신부 어머니</p>
-            <label class="btn-toggle">
-              <input type="checkbox" name="" id="" v-model="weddingInfo.bride.parents[1].isUseAccount" />
-              <span class="circle"></span>
-            </label>
+            <UtilsToggleSwitch v-model="weddingInfo.bride.parents[1].isUseAccount" />
           </div>
           <div class="box-account" v-show="weddingInfo.bride.parents[1].isUseAccount">
             <div class="box-input">
@@ -429,13 +411,6 @@ const onChangeHour = (time: string) => {
 
 const onChangeMinute = (minute: string) => {
   weddingInfo.value.time.minute = parseInt(minute, 10);
-};
-
-const toggleSelect = (event: MouseEvent) => {
-  const target = event.currentTarget as HTMLElement;
-  const options = target.nextElementSibling as HTMLElement;
-  target.classList.toggle('active');
-  options.classList.toggle('active');
 };
 
 const toggleDatePicker = () => {
