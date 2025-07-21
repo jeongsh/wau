@@ -21,7 +21,9 @@
         <tbody>
           <tr v-for="(notice,index) in notices" @click="detailNotice(notice.no)" :style="{ cursor: 'pointer' }" :key="notice.no">
             <td>{{ index + 1 }}</td>
-            <td>{{ notice.title }}</td>
+
+            <td v-if="notice.pick === true">중요 {{ notice.title }}</td>
+            <td v-else> {{ notice.title }}</td>
             <td>{{ transferDate(notice.createdDt) }}</td>
           </tr>
         </tbody>

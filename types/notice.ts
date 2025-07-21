@@ -6,7 +6,6 @@ export interface NoticeInfo {
   pick: boolean
   createdDt: Date 
   updatedDt: Date
-  modifiedDt?: Date | null
   deletedDt?: Date | null
   deletedYn: boolean
 }

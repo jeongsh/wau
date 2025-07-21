@@ -1,9 +1,9 @@
-import { getNoticeById, makeNotice } from '../../services/help/noticeService'
+import { getFaqById, makeFaq } from '../../services/help/faqService'
 
 export default defineEventHandler(async (event) => {
   const method = event.method?.toUpperCase()
 
-  // GET - 공지사항 상세 조회
+  // GET - FAQ 상세 조회
   if (method === 'GET') {
     try {
       const query = getQuery(event)
@@ -12,22 +12,22 @@ export default defineEventHandler(async (event) => {
       if (!no || isNaN(no)) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'Invalid notice number'
+          statusMessage: 'Invalid FAQ number'
         })
       }
 
-      const notice = await getNoticeById(no)
+      const faq = await getFaqById(no)
       
-      if (!notice) {
+      if (!faq) {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Notice not found'
+          statusMessage: 'FAQ not found'
         })
       }
 
-      return notice
+      return faq
     } catch (error: any) {
-      console.error('Notice get error:', error)
+      console.error('FAQ get error:', error)
       
       if (error.statusCode) {
         throw error
@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // POST - 공지사항 생성
+  // POST - FAQ 생성
   if (method === 'POST') {
     try {
       const body = await readBody(event)
@@ -52,19 +52,20 @@ export default defineEventHandler(async (event) => {
         })
       }
 
-      const notice = await makeNotice({
+      const faq = await makeFaq({
         title: body.title,
         content: body.content,
-        pick: body.pick || false
+        pick: body.pick || false,
+        type: body.type || 'general' // Default type if not provided
       })
 
       return {
         success: true,
-        data: notice
+        data: faq
       }
     } catch (error: any) {
-      console.error('Notice creation error:', error)
-      
+      console.error('FAQ creation error:', error)
+
       if (error.statusCode) {
         throw error
       }
