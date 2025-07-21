@@ -6,7 +6,7 @@
     <div class="nav">
       <NuxtLink to="/help">공지사항</NuxtLink>
       <NuxtLink to="/help/faq">FAQ</NuxtLink>
-      <NuxtLink to="/help/contact">문의하기</NuxtLink>
+      <NuxtLink to="/help/contact">1:1문의</NuxtLink>
     </div>
     <div class="content">
       <h1>공지사항</h1>

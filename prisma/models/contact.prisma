@@ -1,0 +1,14 @@
+model Contact {
+  no          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(100)
+  content     String    @db.Text
+  type        String    @default("general") @db.VarChar(50)
+  userName    String    @db.VarChar(50)
+  userEmail   String    @db.VarChar(100)
+  phoneNumber String?   @db.VarChar(20)
+  answer      String?   @db.Text
+  createdDt   DateTime  @default(now())
+  updatedDt   DateTime  @default(now())
+  deletedDt   DateTime?
+  deletedYn   Boolean   @default(false)
+}

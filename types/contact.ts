@@ -9,7 +9,6 @@ export interface Contact {
   answer: string
   createdDt: Date
   updatedDt: Date
-  modifiedDt?: Date
   deletedDt?: Date
   deletedYn: boolean
 }
