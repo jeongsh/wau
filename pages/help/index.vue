@@ -13,17 +13,20 @@
       <table>
         <thead>
           <tr>
+            <th>No.</th>
             <th>제목</th>
             <th>작성일</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="notice in noticeList" @click="detailNotice(notice.no)">
+          <tr v-for="(notice,index) in notices" @click="detailNotice(notice.no)" :style="{ cursor: 'pointer' }" :key="notice.no">
+            <td>{{ index + 1 }}</td>
             <td>{{ notice.title }}</td>
-            <td>{{ notice.createdDt }}</td>
+            <td>{{ transferDate(notice.createdDt) }}</td>
           </tr>
         </tbody>
       </table>
+      <button @click="navigateTo('/help/notice/write')">공지사항 작성</button>
     </div>
   </div>
 </template>
@@ -31,18 +34,10 @@
 <script setup lang="ts">
 import type { NoticeInfo } from '~/types/notice'
 const notices = ref([]) as Ref<NoticeInfo[]>
-const noticeList = ref<{ createdDt: string; updatedDt: string; no: number }[]>([])
-const { $date } = useNuxtApp()
+const { transferDate } = useDate()
 
 onMounted(async () => {
   notices.value = await $fetch('/api/help/notices')
-  notices.value.forEach(notice => {
-    noticeList.value.push({
-      createdDt: $date.toKST(notice.createdDt),
-      updatedDt: $date.toKST(notice.updatedDt),
-      no: notice.no
-    })
-  })
 })
 
 const detailNotice = (no: number) => {

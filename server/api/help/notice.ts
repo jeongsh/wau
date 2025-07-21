@@ -38,3 +38,14 @@ export const getNotice = async (id: number) => {
     }
   });
 }
+
+export const createNotice = async (data: { title: string; content: string; pick: boolean }) => {
+  return await prisma.notice.create({
+    data: {
+      title: data.title,
+      content: data.content,
+      pick: data.pick,
+      deletedYn: false
+    }
+  });
+}
