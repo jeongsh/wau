@@ -363,11 +363,15 @@
           </div>
         </UtilsAccordion>
       </div>
+      <div class="box-order">
+        asdasdsd
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import imageCompression from 'browser-image-compression';
 import { useEditorStore } from '~/stores/editor';
 
 const editorStore = useEditorStore();
@@ -452,33 +456,54 @@ const onChangeIntro = () => {
   designInfo.value.intro.isShowIntro = true;
 };
 
-const onMainVisualChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  if (target.files && target.files[0]) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      designInfo.value.mainVisual.image = e.target?.result as string;
-    };
-    reader.readAsDataURL(target.files[0]);
+const convertToWebp = async (file: File): Promise<string> => {
+  // file이 jpg, jpeg,png 면 webp로 webp면 변환 안하고 gif면 webm으로
+  if(file.type === 'image/webp') return await imageCompression.getDataUrlFromFile(file);
+
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    fileType: `${file.type === 'image/gif' ? 'image/webm' : 'image/webp'}`,
+    useWebWorker: true,
+  };
+
+  try {
+    const compressedFile = await imageCompression(file, options);
+    return await imageCompression.getDataUrlFromFile(compressedFile);
+  } catch (error) {
+    console.error('이미지 WebP 변환 실패:', error);
+    throw error;
   }
 };
 
-const onGalleryImageChange = (event: Event) => {
+const onMainVisualChange = async (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    try {
+      const webpImage = await convertToWebp(target.files[0]);
+      designInfo.value.mainVisual.image = webpImage;
+    } catch (error) {
+      console.error('메인 비주얼 이미지 변환 실패:', error);
+    }
+  }
+};
+
+const onGalleryImageChange = async (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files) {
-    // designInfo.value.gallery.images에 push
     const files = Array.from(target.files);
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
+    for (const file of files) {
+      try {
+        const webpImage = await convertToWebp(file);
         if (designInfo.value.gallery.images) {
-          designInfo.value.gallery.images.push(e.target?.result as string);
+          designInfo.value.gallery.images.push(webpImage);
         } else {
-          designInfo.value.gallery.images = [e.target?.result as string];
+          designInfo.value.gallery.images = [webpImage];
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      } catch (error) {
+        console.error('갤러리 이미지 변환 실패:', error);
+      }
+    }
   }
 };
 

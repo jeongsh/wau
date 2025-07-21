@@ -22,6 +22,7 @@
     "@prisma/client": "^6.11.1",
     "@prisma/nuxt": "^0.3.0",
     "bcrypt": "^6.0.0",
+    "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.13",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.17.6",
