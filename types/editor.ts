@@ -28,6 +28,24 @@ export interface DesignInfo {
     galleryType: string;
     images: string[] | null;
   }
+  video: {
+    isShowVideo: boolean;
+    videoUrl: string | null;
+    type: string;
+  }
+  rsvp:{
+    isShowRsvp: boolean;
+    title: string | null;
+    description: string | null;
+    isShowPeopleCount?: boolean;
+    isShowEating?: boolean;
+    isShowRide?: boolean;
+    isShowMessage?: boolean;
+    isShowNumber?: boolean;
+    isPopup: boolean | null;
+    isAlert: boolean  | null;
+  };
+  componentOrder: string[];
 }
 
 interface Account{
@@ -77,4 +95,21 @@ export interface WeddingInfo {
     detail: string | null;
     number: string | null;
   };
+  rsvp: {
+    side: 'groom' | 'bride';
+    isAttending: boolean;
+    name: string;
+    number: string | null;
+    message: string | null;
+    peopleCount: number | null;
+    isEating: boolean | null;
+    isRide: boolean | null;
+  } | null;
+}
+
+export interface ComponentItem {
+  id: string;
+  name: string;
+  isRequired: boolean;
+  isActive: boolean;
 }

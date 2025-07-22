@@ -1,5 +1,5 @@
 import{ defineStore } from 'pinia';
-import type { DesignInfo, WeddingInfo } from '~/types/editor';
+import type { DesignInfo, WeddingInfo, ComponentItem } from '~/types/editor';
 
 export const useEditorStore = defineStore('info', ()=>{
   const designInfo = ref<DesignInfo>({
@@ -39,6 +39,29 @@ export const useEditorStore = defineStore('info', ()=>{
       galleryType: 'Swipe',
       images: null,
     },
+    video:{
+      isShowVideo: false,
+      videoUrl: null,
+      type: 'horizontal',
+    },
+    rsvp: {
+      isShowRsvp: false,
+      title: null,
+      description: null,
+      isPopup: null,
+      isAlert: null,
+    },
+    componentOrder: [
+      'greeting',
+      'designPage',
+      'date',
+      'contact',
+      'account',
+      'gallery',
+      'video',
+      'location',
+      'rsvp',
+    ]
   });
 
   const weddingInfo = ref<WeddingInfo>({
@@ -137,6 +160,16 @@ export const useEditorStore = defineStore('info', ()=>{
       detail: '',
       number: '',
     },
+    rsvp: {
+      side: 'groom',
+      isAttending: false,
+      name: '',
+      number: null,
+      message: null,
+      peopleCount: null,
+      isEating: null,
+      isRide: null,
+    }
   });
 
   const offIntro = () => {
@@ -177,13 +210,93 @@ export const useEditorStore = defineStore('info', ()=>{
     };
   });
 
+  const componentList = computed<ComponentItem[]>(() => [
+    {
+      id: 'intro',
+      name: '인트로',
+      isRequired: false,
+      isActive: designInfo.value.intro.isUseIntro
+    },
+    {
+      id: 'mainVisual',
+      name: '메인 비주얼',
+      isRequired: true,
+      isActive: true
+    },
+    {
+      id: 'greeting',
+      name: '인사말',
+      isRequired: true,
+      isActive: true
+    },
+    {
+      id: 'designPage',
+      name: '디자인 페이지',
+      isRequired: true,
+      isActive: true
+    },
+    {
+      id: 'date',
+      name: '예식 일시',
+      isRequired: true,
+      isActive: designInfo.value.calendar.isShowCalendar || designInfo.value.calendar.isShowCountdown
+    },
+    {
+      id: 'location',
+      name: '예식 장소',
+      isRequired: true,
+      isActive: true
+    },
+    {
+      id: 'contact',
+      name: '연락처',
+      isRequired: false,
+      isActive: designInfo.value.isShowContact
+    },
+    {
+      id: 'account',
+      name: '계좌번호',
+      isRequired: false,
+      isActive: designInfo.value.isShowAccount
+    },
+    {
+      id: 'gallery',
+      name: '갤러리',
+      isRequired: false,
+      isActive: designInfo.value.gallery.isShowGallery
+    },
+    {
+      id: 'video',
+      name: '동영상',
+      isRequired: false,
+      isActive: designInfo.value.video.isShowVideo
+    },
+    {
+      id: 'rsvp',
+      name: '참석여부(RSVP)',
+      isRequired: false,
+      isActive: designInfo.value.rsvp.isShowRsvp
+    }
+  ]);
+
+  const orderedComponents = computed(() => {
+    return designInfo.value.componentOrder
+      .map(id => componentList.value.find(comp => comp.id === id))
+      .filter(comp => comp !== undefined) as ComponentItem[];
+  });
+
+  const updateComponentOrder = (newOrder: string[]) => {
+    designInfo.value.componentOrder = newOrder;
+  };
+
   return {
     designInfo,
     weddingInfo,
     formattedDate,
     formattedTime,
+    componentList,
+    orderedComponents,
+    updateComponentOrder,
     offIntro,
   };
-
-  
 });

@@ -84,14 +84,6 @@
             </div>
           </div>
         </UtilsAccordion>
-        <UtilsAccordion :title="'인트로'">
-          <div class="box-label-theme">
-            <label class="label-theme-type" v-for="introType in introTypes" :key="introType">
-              <input type="radio" :value="introType" v-model="designInfo.intro.type" @change="onChangeIntro" />
-              {{ introType }}
-            </label>
-          </div>
-        </UtilsAccordion>
         <UtilsAccordion :title="'메인 비주얼'">
           <div class="box-label-theme">
             <label class="label-theme-type" v-for="mainVisual in mainVisuals" :key="mainVisual">
@@ -104,6 +96,15 @@
           </div>
           <div class="box-input">
             <input type="file" @change="onMainVisualChange" accept="image/*" />
+          </div>
+          <div class="box-input">
+            <p class="input-title">인트로</p>
+          </div>
+          <div class="box-label-theme">
+            <label class="label-theme-type" v-for="introType in introTypes" :key="introType">
+              <input type="radio" :value="introType" v-model="designInfo.intro.type" @change="onChangeIntro" />
+              {{ introType }}
+            </label>
           </div>
         </UtilsAccordion>
         <UtilsAccordion :title="'인사말'">
@@ -362,9 +363,78 @@
             </label>
           </div>
         </UtilsAccordion>
+        <UtilsAccordion title="동영상" v-model:isSwitch="designInfo.video.isShowVideo">
+          <div class="box-input">
+            <p class="input-title">동영상 URL</p>
+            <input class="input-l" type="text" @change="onChangeVideoUrl" v-model="videoUrl" placeholder="유튜브, 비메오 등 동영상 URL을 입력해주세요." />
+          </div>
+          <div class="box-input">
+            <p class="input-title">동영상 타입</p>
+            <div class="box-btn-type">
+              <button
+                v-for="videoType in videoTypes" 
+                @click="designInfo.video.type = videoType.type" 
+                :key="videoType.type"
+                :class="`btn-video-type ${designInfo.video.type === videoType.type ? 'active' : ''}`"
+              >
+                {{ videoType.label }}
+              </button>
+            </div>
+          </div>
+        </UtilsAccordion>
+        <UtilsAccordion title="참석여부(RSVP)" v-model:isSwitch="designInfo.rsvp.isShowRsvp">
+          <div class="box-input">
+            <p class="input-title">제목</p>
+            <input class="input-l" type="text" v-model="designInfo.rsvp.title" placeholder="제목을 입력해주세요." />
+          </div>
+          <div class="box-input">
+            <p class="input-title">설명</p>
+            <textarea class="input-l" v-model="designInfo.rsvp.description" placeholder="설명을 입력해주세요."></textarea>
+          </div>
+          <div class="box-label">
+            <label class="label-rsvp-type">
+              <input type="checkbox" v-model="designInfo.rsvp.isShowPeopleCount" />
+              인원
+            </label>
+            <label class="label-rsvp-type">
+              <input type="checkbox" v-model="designInfo.rsvp.isShowNumber" />
+              연락처
+            </label>
+            <label class="label-rsvp-type">
+              <input type="checkbox" v-model="designInfo.rsvp.isShowMessage" />
+              전달사항
+            </label>
+            <label class="label-rsvp-type">
+              <input type="checkbox" v-model="designInfo.rsvp.isShowEating" />
+              식사 여부
+            </label>
+            <label class="label-rsvp-type">
+              <input type="checkbox" v-model="designInfo.rsvp.isShowRide" />
+              대절 버스 탑승
+            </label>
+          </div>
+        </UtilsAccordion>
       </div>
       <div class="box-order">
-        asdasdsd
+        <h3 class="order-title">컴포넌트 순서</h3>
+        <div class="order-list" ref="sortableContainer">
+          <div 
+            v-for="component in orderedComponents" 
+            :key="component.id"
+            :data-id="component.id"
+            class="order-item"
+            :style="`${ component.isActive ? '' : 'display: none;' }`"
+          >
+            <div class="drag-handle">⋮⋮</div>
+            <span class="component-name">{{ component.name }}</span>
+            <div class="component-status">
+              <span v-if="component.isRequired" class="badge required">필수</span>
+              <span v-else-if="component.isActive" class="badge active">활성</span>
+              <span v-else class="badge inactive">비활성</span>
+            </div>
+          </div>
+        </div>
+        <p class="order-note">드래그하여 순서를 변경하세요</p>
       </div>
     </div>
   </div>
@@ -373,9 +443,11 @@
 <script setup lang="ts">
 import imageCompression from 'browser-image-compression';
 import { useEditorStore } from '~/stores/editor';
+import getVideoId from 'get-video-id';
+import Sortable from 'sortablejs';
 
 const editorStore = useEditorStore();
-const { weddingInfo, designInfo } = storeToRefs(editorStore);
+const { weddingInfo, designInfo, orderedComponents } = storeToRefs(editorStore);
 
 const introTypes = ['A', 'B', 'C'];
 const mainVisuals = ['A', 'B'];
@@ -421,6 +493,17 @@ const minuteOptions = [
   '0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'
 ];
 
+const videoTypes = [
+  {
+    type: 'horizontal',
+    label: '16:9',
+  },
+
+  {
+    type: 'vertical',
+    label: '9:16',
+  },
+];
 const currentFontLabel = computed(() => {
   const font = fontStyles.find(f => f.fontFamily === designInfo.value.fontStyle);
   return font ? font.label : '프리텐다드';
@@ -431,7 +514,9 @@ const formatedDate = (date: Date) => {
 };
 
 const isLoading = ref(true);
-
+const videoUrl = ref<string | null>(null);
+const sortableContainer = ref<HTMLElement | null>(null);
+let sortableInstance: Sortable | null = null;
 
 onMounted(() => {
   // box-datepicker가 아닌 곳을 클릭하면 box-datepicker의 active 클래스를 제거
@@ -447,9 +532,33 @@ onMounted(() => {
     }
   });
 
+  // 드래그 앤 드롭 초기화
   nextTick(() => {
+    if (sortableContainer.value) {
+      sortableInstance = Sortable.create(sortableContainer.value, {
+        animation: 150,
+        handle: '.drag-handle',
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        onEnd: (evt: Sortable.SortableEvent) => {
+          if (evt.oldIndex !== undefined && evt.newIndex !== undefined) {
+            const currentOrder = [...designInfo.value.componentOrder];
+            const movedItem = currentOrder.splice(evt.oldIndex, 1)[0];
+            currentOrder.splice(evt.newIndex, 0, movedItem);
+            editorStore.updateComponentOrder(currentOrder);
+          }
+        }
+      });
+    }
     isLoading.value = false;
   });
+});
+
+onBeforeUnmount(() => {
+  if (sortableInstance) {
+    sortableInstance.destroy();
+  }
 });
 
 const onChangeIntro = () => {
@@ -537,6 +646,14 @@ const toggleDatePicker = () => {
   const datePicker = document.querySelector('.box-datepicker') as HTMLElement;
   datePicker.classList.toggle('active');
 };
+
+const onChangeVideoUrl = () => {
+  if (videoUrl.value) {
+    const videoId = getVideoId(videoUrl.value) as { id: string, service: string };
+    designInfo.value.video.videoUrl = videoId.id;
+  }
+};
+
 </script>
 
 <style lang="scss" scoped>
@@ -710,6 +827,95 @@ const toggleDatePicker = () => {
   background: #fff;
   border-radius: 8px;
   padding: 18px 24px;
+  .order-title{
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .order-list{
+    max-height: 100%;
+    overflow-y: auto;
+    .order-item{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border: 1px solid #dbdbdb;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #f4f3f0;
+      transition: all 0.2s ease;
+      &.required{
+        border-color: #ff4d4f;
+      }
+      &.inactive{
+        background: #f9f9f9;
+        opacity: 0.6;
+      }
+      .drag-handle{
+        cursor: move;
+        font-size: 18px;
+        color: #999;
+        margin-right: 8px;
+        user-select: none;
+        &:hover {
+          color: #666;
+        }
+      }
+      .component-name{
+        flex: 1;
+        font-size: 14px;
+        font-weight: 500;
+        color: #2b2b2b;
+      }
+      .component-status{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        .badge{
+          display: inline-block;
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 500;
+          &.required{
+            background: rgba(255, 77, 79, 0.1);
+            color: #ff4d4f;
+          }
+          &.active{
+            background: rgba(76, 217, 100, 0.1);
+            color: #4cd964;
+          }
+          &.inactive{
+            background: rgba(153, 153, 153, 0.1);
+            color: #999;
+          }
+        }
+      }
+    }
+  }
+  .order-note{
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+  }
+}
+// Sortable.js 드래그 상태 스타일
+:global(.sortable-ghost) {
+  opacity: 0.4;
+  background: #e6f7ff !important;
+  border-color: #1890ff !important;
+}
+
+:global(.sortable-chosen) {
+  transform: rotate(5deg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+:global(.sortable-drag) {
+  opacity: 1;
+  transform: rotate(5deg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 .box-btn-type{
   display: flex;
@@ -740,6 +946,13 @@ const toggleDatePicker = () => {
     aspect-ratio: 1;
     border-radius: 8px;
     overflow: hidden;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
   }
   .gallery-thumbnail{
     width: 100%;

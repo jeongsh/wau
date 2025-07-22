@@ -4,41 +4,48 @@
     :style="{
       overflowY : designInfo.intro.isShowIntro ? 'hidden' : 'auto',
     }" 
-    :class="[
+    :class=" [
       `theme-${designInfo.themeColor}`,
       `${designInfo.fontStyle}`,
       `fontsize-${designInfo.fontSize}`,
     ]"
-    v-auto-animate
   >
-    <section class="sec-main">
-      <component :is="MainVisualComponent" :designInfo="designInfo" :weddingInfo="weddingInfo" />
-      <component 
-        v-if="designInfo.intro.isShowIntro"
-        :is="IntroComponent" 
-        :designInfo="designInfo" 
-        :weddingInfo="weddingInfo" 
-      />
-    </section>
-    <BlocksInivitation />
-    <DesignPagesComponent />
-    <BlocksDate
-      v-if="designInfo.calendar.isShowCalendar || designInfo.calendar.isShowCountdown"
-      :weddingInfo="weddingInfo"
-      :designInfo="designInfo"
-      :date="formattedDate"
-      :time="formattedTime"
-    />
-    <BlocksContact
-      v-if="designInfo.isShowContact"
-    />
-    <BlocksAccount
-      v-if="designInfo.isShowAccount"
-    />
+  <!-- 인트로 -->
+  <section class="sec-main">
+    <component :is="MainVisualComponent" :designInfo="designInfo" :weddingInfo="weddingInfo" />
     <component 
-      v-if="designInfo.gallery.isShowGallery" 
-      :is="GalleryComponent" 
+      v-if="designInfo.intro.isShowIntro"
+      :is="IntroComponent" 
+      :designInfo="designInfo" 
+      :weddingInfo="weddingInfo" 
     />
+  </section>
+    <template v-for="component in orderedComponents" :key="component.id">
+      <BlocksInivitation v-if="component.id === 'greeting'" />
+
+      <component v-else-if="component.id === 'designPage'" :is="DesignPagesComponent" />
+      <BlocksDate
+        v-else-if="component.id === 'date' && component.isActive"
+        :weddingInfo="weddingInfo"
+        :designInfo="designInfo"
+        :date="formattedDate"
+        :time="formattedTime"
+      />
+
+      <BlocksLocation v-else-if="component.id === 'location'" />
+
+      <BlocksContact v-else-if="component.id === 'contact' && component.isActive" />
+
+      <BlocksAccount v-else-if="component.id === 'account' && component.isActive" />
+
+      <component 
+        v-else-if="component.id === 'gallery' && component.isActive" 
+        :is="GalleryComponent" 
+      />
+
+      <BlocksVideo v-else-if="component.id === 'video' && component.isActive" />
+      <BlocksRsvp v-else-if="component.id === 'rsvp' && component.isActive" />
+    </template>
   </div>
 </template>
 
@@ -47,7 +54,7 @@ import type { DesignInfo, WeddingInfo } from '~/types/editor';
 import { useEditorStore } from '~/stores/editor';
 
 const editorStore = useEditorStore();
-const { designInfo, weddingInfo, formattedDate, formattedTime } = storeToRefs(editorStore);
+const { designInfo, weddingInfo, formattedDate, formattedTime, orderedComponents } = storeToRefs(editorStore);
 
 const IntroComponent = computed(() => {
   const IntroType = designInfo.value.intro.type;

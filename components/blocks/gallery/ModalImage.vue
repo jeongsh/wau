@@ -1,6 +1,6 @@
 <template>
-  <div class="modal">
-    <div class="modal-container">
+  <div class="modal" @click="$emit('close')">
+    <div class="modal-container" @click.stop>
       <button class="btn-close" @click="$emit('close')">X</button>
       <swiper-container
         ref="containerRef"
@@ -28,6 +28,8 @@ const { designInfo, weddingInfo } = storeToRefs(editorStore);
 const props = defineProps<{
   currentIndex: number;
 }>();
+
+const emit = defineEmits(['close']);
 
 </script>
 
