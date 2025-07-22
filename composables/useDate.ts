@@ -9,7 +9,7 @@ export const useDate = () => {
     return dayjs.utc(date).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss')
   }
 
-  const transferDateFormatted = (date: Date | string | null, format?: string) => {
+  const transferDateFormatted = (date: Date | string | null, format: string = 'YYYY년 MM월 dddd HH:ss:mm') => {
     if (!date) return ''
     return dayjs.utc(date).tz('Asia/Seoul').format(format)
   }
