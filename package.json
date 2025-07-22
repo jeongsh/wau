@@ -24,7 +24,7 @@
     "@vueuse/integrations": "^13.5.0",
     "bcrypt": "^6.0.0",
     "browser-image-compression": "^2.0.2",
-    "dayjs": "^1.11.13",
+    "dayjs-nuxt": "^2.1.11",
     "get-video-id": "^4.1.7",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.17.6",

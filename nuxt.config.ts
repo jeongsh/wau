@@ -5,8 +5,13 @@ export default defineNuxtConfig({
   runtimeConfig: {
     jwtSecretKey: process.env.JWT_SECRET_KEY,
   },
-  modules: [// '@prisma/nuxt',
-  '@pinia/nuxt', 'nuxt-tiptap-editor', '@formkit/auto-animate/nuxt', 'nuxt-swiper'],
+  modules: [
+    '@pinia/nuxt',
+    'nuxt-tiptap-editor',
+    '@formkit/auto-animate/nuxt',
+    'nuxt-swiper',
+    'dayjs-nuxt'
+  ],
   //scss
   css: [
     '@/assets/scss/common.scss'
@@ -14,4 +19,10 @@ export default defineNuxtConfig({
   tiptap: {
     prefix: 'Tiptap',
   },
+  dayjs: {
+    locales: ['ko', 'en'],
+    plugins: ['relativeTime', 'utc', 'timezone'],
+    defaultLocale: 'ko',
+    defaultTimezone: 'Asia/Seoul'
+  }
 })
