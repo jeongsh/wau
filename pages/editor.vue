@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap-editor" v-auto-animate>
+  <div class="wrap-editor">
     <div class="modal-loading" v-if="isLoading">
       로딩중...
     </div>

@@ -105,5 +105,20 @@ const GalleryComponent = computed(() => {
     position: relative;
   }
 }
-
+</style>
+<style lang="scss">
+.preview{
+  img{
+    touch-action: pan-y; /* 모든 터치 제스처 차단 */
+    -webkit-user-drag: none; /* 드래그 방지 */
+    user-select: none;
+    pointer-events: none; /* (선택사항) 클릭도 막고 싶다면 추가 */
+    -webkit-touch-callout: none; /* iOS에서 이미지 클릭 시 메뉴 표시 방지 */
+    -webkit-tap-highlight-color: transparent; /* 모바일에서 클릭 시 하이라이트 제거 */
+    -webkit-user-select: none; /* iOS에서 드래그 방지 */
+    -moz-user-select: none; /* Firefox에서 드래그 방지 */
+    -ms-user-select: none; /* IE에서 드래그 방지 */
+    user-select: none; /* 모든 브라우저에서 드래그 방지 */
+  }
+}
 </style>
