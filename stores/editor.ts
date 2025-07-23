@@ -59,8 +59,8 @@ export const useEditorStore = defineStore('info', ()=>{
       'account',
       'gallery',
       'video',
-      'location',
       'rsvp',
+      'location',
     ]
   });
 
