@@ -1,70 +1,217 @@
 <template>
   <div class="worldcup-container">
+    <!-- 배경 장식 요소들 -->
+    <div class="background-elements">
+      <div class="floating-shape shape-1">💼</div>
+      <div class="floating-shape shape-2">🚀</div>
+      <div class="floating-shape shape-3">💡</div>
+      <div class="floating-shape shape-4">⭐</div>
+      <div class="floating-shape shape-5">🎯</div>
+      <div class="floating-shape shape-6">📈</div>
+      <div class="floating-shape shape-7">💻</div>
+      <div class="floating-shape shape-8">🏆</div>
+      <div class="floating-circle circle-1"></div>
+      <div class="floating-circle circle-2"></div>
+      <div class="floating-circle circle-3"></div>
+      <div class="floating-circle circle-4"></div>
+      <div class="floating-circle circle-5"></div>
+    </div>
+
     <!-- 시작 화면 -->
     <div v-if="gameState === 'start'" class="start-screen">
-      <h1 class="title">🏆 <span>이상형 월드컵</span> 🏆</h1>
-      <p class="subtitle">당신의 이상형 회사를 찾아보세요!</p>
-      <div class="tournament-options">
-        <button 
-          v-for="option in tournamentOptions" 
-          :key="option.value"
-          @click="startGame(option.value)"
-          class="tournament-btn"
-        >
-          {{ option.label }}
-        </button>
+      <div class="start-content">
+        <div class="title-container">
+          <div class="trophy-animation">
+            <div class="trophy-glow"></div>
+            <span class="trophy">🏆</span>
+          </div>
+          <h1 class="title">
+            <span class="gradient-text">이상형 월드컵</span>
+          </h1>
+          <div class="trophy-animation">
+            <div class="trophy-glow"></div>
+            <span class="trophy">🏆</span>
+          </div>
+        </div>
+        <p class="subtitle">
+          <span class="highlight-text">당신의 이상형 회사</span>를 찾아보세요!
+        </p>
+        <div class="stats-info">
+          <div class="stat-item">
+            <span class="stat-number">64</span>
+            <span class="stat-label">개 기업</span>
+          </div>
+          <div class="stat-divider">|</div>
+          <div class="stat-item">
+            <span class="stat-number">∞</span>
+            <span class="stat-label">가지 선택</span>
+          </div>
+        </div>
+        <div class="tournament-options">
+          <button 
+            v-for="option in tournamentOptions" 
+            :key="option.value"
+            @click="startGame(option.value)"
+            class="tournament-btn"
+          >
+            <span class="btn-icon">{{ getButtonIcon(option.value) }}</span>
+            <span class="btn-text">{{ option.label }}</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </div>
+        <div class="feature-highlights">
+          <div class="feature-item">
+            <span class="feature-icon">⚡</span>
+            <span class="feature-text">빠른 선택</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🎨</span>
+            <span class="feature-text">아름다운 UI</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🏢</span>
+            <span class="feature-text">실제 기업</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- 게임 진행 화면 -->
     <div v-else-if="gameState === 'playing'" class="game-screen">
       <div class="game-header">
-        <div class="round-info">
+        <div class="round-badge">
+          <span class="round-icon">🔥</span>
           <span class="round-text">{{ currentRoundName }}</span>
-          <span class="match-progress">{{ currentMatchIndex + 1 }} / {{ totalMatches }}</span>
         </div>
-        <div class="progress-bar">
-          <div 
-            class="progress-fill" 
-            :style="{ width: `${progressPercentage}%` }"
-          ></div>
+        <div class="match-info">
+          <span class="match-progress">{{ currentMatchIndex + 1 }} / {{ totalMatches }}</span>
+          <div class="remaining-count">
+            <span class="remaining-text">남은 경기</span>
+            <span class="remaining-number">{{ totalMatches - currentMatchIndex - 1 }}</span>
+          </div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div 
+              class="progress-fill" 
+              :style="{ width: `${progressPercentage}%` }"
+            ></div>
+          </div>
+          <div class="progress-percentage">{{ Math.round(progressPercentage) }}%</div>
         </div>
       </div>
 
-      <div class="vs-container">
-        <div class="company-card left" @click="selectCompany(currentMatch[0])">
-          <div class="company-emoji">{{ currentMatch[0].emoji }}</div>
-          <h3 class="company-name">{{ currentMatch[0].name }}</h3>
-          <p class="company-category">{{ currentMatch[0].category }}</p>
-          <p class="company-description">{{ currentMatch[0].description }}</p>
-        </div>
+      <div class="battle-arena">
+        <div class="vs-container">
+          <div class="company-card left" @click="selectCompany(currentMatch[0])">
+            <div class="card-glow left-glow"></div>
+            <div class="company-badge">{{ currentMatch[0].category }}</div>
+            <div class="company-emoji">{{ currentMatch[0].emoji }}</div>
+            <h3 class="company-name">{{ currentMatch[0].name }}</h3>
+            <div class="company-stats">
+              <div class="stat-chip">
+                <span class="stat-icon">⭐</span>
+                <span>대표기업</span>
+              </div>
+            </div>
+            <p class="company-description">{{ currentMatch[0].description }}</p>
+            <div class="click-hint">
+              <span class="hint-text">선택하기</span>
+              <span class="hint-arrow">👆</span>
+            </div>
+          </div>
 
-        <div class="vs-divider">
-          <span class="vs-text">VS</span>
-        </div>
+          <div class="vs-divider">
+            <div class="vs-circle">
+              <div class="vs-inner">
+                <span class="vs-text">VS</span>
+                <div class="battle-sparks">
+                  <div class="spark spark-1">⚡</div>
+                  <div class="spark spark-2">💥</div>
+                  <div class="spark spark-3">✨</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div class="company-card right" @click="selectCompany(currentMatch[1])">
-          <div class="company-emoji">{{ currentMatch[1].emoji }}</div>
-          <h3 class="company-name">{{ currentMatch[1].name }}</h3>
-          <p class="company-category">{{ currentMatch[1].category }}</p>
-          <p class="company-description">{{ currentMatch[1].description }}</p>
+          <div class="company-card right" @click="selectCompany(currentMatch[1])">
+            <div class="card-glow right-glow"></div>
+            <div class="company-badge">{{ currentMatch[1].category }}</div>
+            <div class="company-emoji">{{ currentMatch[1].emoji }}</div>
+            <h3 class="company-name">{{ currentMatch[1].name }}</h3>
+            <div class="company-stats">
+              <div class="stat-chip">
+                <span class="stat-icon">⭐</span>
+                <span>대표기업</span>
+              </div>
+            </div>
+            <p class="company-description">{{ currentMatch[1].description }}</p>
+            <div class="click-hint">
+              <span class="hint-text">선택하기</span>
+              <span class="hint-arrow">👆</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 결과 화면 -->
     <div v-else-if="gameState === 'result'" class="result-screen">
+      <div class="celebration-bg">
+        <div class="confetti">🎊</div>
+        <div class="confetti">🎉</div>
+        <div class="confetti">🏆</div>
+        <div class="confetti">⭐</div>
+        <div class="confetti">🎊</div>
+        <div class="confetti">💼</div>
+        <div class="confetti">🚀</div>
+        <div class="confetti">💡</div>
+      </div>
+      
       <div class="winner-announcement">
-        <h1 class="winner-title">🎉 <span>우승자</span> 🎉</h1>
+        <div class="crown-animation">
+          <span class="crown">👑</span>
+        </div>
+        <h1 class="winner-title">
+          <span class="celebration-emoji">🎉</span>
+          <span class="gradient-text">우승자</span>
+          <span class="celebration-emoji">🎉</span>
+        </h1>
+        
         <div class="winner-card">
+          <div class="winner-glow"></div>
+          <div class="winner-badge">
+            <span class="badge-icon">🏆</span>
+            <span class="badge-text">WINNER</span>
+          </div>
           <div class="winner-emoji">{{ winner?.emoji }}</div>
           <h2 class="winner-name">{{ winner?.name }}</h2>
-          <p class="winner-category">{{ winner?.category }}</p>
+          <div class="winner-category">
+            <span class="category-icon">🏢</span>
+            <span>{{ winner?.category }}</span>
+          </div>
           <p class="winner-description">{{ winner?.description }}</p>
+          <div class="achievement-stats">
+            <div class="achievement-item">
+              <span class="achievement-icon">🎯</span>
+              <span class="achievement-text">최종 선택</span>
+            </div>
+            <div class="achievement-item">
+              <span class="achievement-icon">⚡</span>
+              <span class="achievement-text">승리</span>
+            </div>
+          </div>
         </div>
+        
         <div class="result-actions">
-          <button @click="restartGame" class="restart-btn">다시 하기</button>
-          <button @click="goHome" class="home-btn">처음으로</button>
+          <button @click="restartGame" class="restart-btn">
+            <span class="btn-icon">🔄</span>
+            <span>다시 하기</span>
+          </button>
+          <button @click="goHome" class="home-btn">
+            <span class="btn-icon">🏠</span>
+            <span>처음으로</span>
+          </button>
         </div>
       </div>
     </div>
@@ -198,6 +345,18 @@ const progressPercentage = computed(() => {
   return ((currentMatchIndex.value + 1) / totalMatches.value) * 100;
 });
 
+// 버튼 아이콘 반환 함수
+const getButtonIcon = (value: number) => {
+  const icons: Record<number, string> = {
+    4: '🔥',
+    8: '⚡',
+    16: '⭐',
+    32: '🚀',
+    64: '👑'
+  };
+  return icons[value] || '🏆';
+};
+
 // 게임 시작
 const startGame = (tournamentSize: number) => {
   selectedTournamentSize.value = tournamentSize;
@@ -260,6 +419,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
   
   &::before {
     content: '';
@@ -274,6 +434,75 @@ onMounted(() => {
   }
 }
 
+// 배경 장식 요소들
+.background-elements {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+
+  .floating-shape {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.3;
+    animation: float 6s ease-in-out infinite;
+
+    &.shape-1 { top: 10%; left: 15%; animation-delay: 0s; }
+    &.shape-2 { top: 20%; right: 20%; animation-delay: 1s; }
+    &.shape-3 { top: 60%; left: 10%; animation-delay: 2s; }
+    &.shape-4 { top: 70%; right: 15%; animation-delay: 3s; }
+    &.shape-5 { top: 40%; right: 30%; animation-delay: 4s; }
+    &.shape-6 { top: 30%; left: 25%; animation-delay: 5s; }
+    &.shape-7 { top: 80%; left: 40%; animation-delay: 2.5s; }
+    &.shape-8 { top: 15%; left: 60%; animation-delay: 1.5s; }
+  }
+
+  .floating-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(124, 77, 255, 0.1), rgba(69, 213, 76, 0.1));
+    animation: float 8s ease-in-out infinite;
+
+    &.circle-1 { 
+      width: 60px; height: 60px; 
+      top: 25%; left: 5%; 
+      animation-delay: 0.5s; 
+    }
+    &.circle-2 { 
+      width: 80px; height: 80px; 
+      top: 45%; right: 10%; 
+      animation-delay: 1.5s; 
+    }
+    &.circle-3 { 
+      width: 40px; height: 40px; 
+      top: 75%; left: 70%; 
+      animation-delay: 2.5s; 
+    }
+    &.circle-4 { 
+      width: 50px; height: 50px; 
+      top: 10%; right: 40%; 
+      animation-delay: 3.5s; 
+    }
+    &.circle-5 { 
+      width: 70px; height: 70px; 
+      top: 85%; right: 60%; 
+      animation-delay: 4.5s; 
+    }
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
 // 시작 화면
 .start-screen {
   text-align: center;
@@ -281,14 +510,43 @@ onMounted(() => {
   position: relative;
   z-index: 1;
 
+  .title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .trophy-animation {
+      position: relative;
+      
+      .trophy {
+        font-size: 3rem;
+        animation: pulse 2s infinite;
+      }
+      
+      .trophy-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+        animation: glow 2s infinite;
+      }
+    }
+  }
+
   .title {
     font-size: 3.5rem;
-    margin-bottom: 1rem;
+    margin: 0;
     color: #121212;
     font-weight: 800;
     letter-spacing: -1px;
     
-    span {
+    .gradient-text {
       background: linear-gradient(135deg, #7C4DFF 0%, #45D54C 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -298,9 +556,56 @@ onMounted(() => {
 
   .subtitle {
     font-size: 1.3rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     color: #444444;
     font-weight: 300;
+    
+    .highlight-text {
+      background: linear-gradient(135deg, #7C4DFF 0%, #45D54C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+  }
+
+  .stats-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    border: 1px solid rgba(124, 77, 255, 0.1);
+    backdrop-filter: blur(10px);
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      
+      .stat-number {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #7C4DFF;
+      }
+      
+      .stat-label {
+        font-size: 0.9rem;
+        color: #666;
+        font-weight: 500;
+      }
+    }
+
+    .stat-divider {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
   }
 
   .tournament-options {
@@ -308,11 +613,14 @@ onMounted(() => {
     flex-direction: column;
     gap: 1.2rem;
     max-width: 350px;
-    margin: 0 auto;
+    margin: 0 auto 2rem;
   }
 
   .tournament-btn {
-    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
     font-size: 1.1rem;
     font-weight: 600;
     border: none;
@@ -324,11 +632,58 @@ onMounted(() => {
     border: 1px solid rgba(124, 77, 255, 0.2);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
+    .btn-icon {
+      font-size: 1.3rem;
+    }
+
+    .btn-text {
+      flex: 1;
+      text-align: center;
+    }
+
+    .btn-arrow {
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+    }
+
     &:hover {
       background: #7C4DFF;
       color: #ffffff;
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(124, 77, 255, 0.3);
+      
+      .btn-arrow {
+        transform: translateX(5px);
+      }
+    }
+  }
+
+  .feature-highlights {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.2rem;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+      border: 1px solid rgba(124, 77, 255, 0.1);
+      backdrop-filter: blur(5px);
+
+      .feature-icon {
+        font-size: 1.2rem;
+      }
+
+      .feature-text {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #666;
+      }
     }
   }
 }
@@ -345,39 +700,113 @@ onMounted(() => {
     text-align: center;
     margin-bottom: 3rem;
 
-    .round-info {
+    .round-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #7C4DFF 0%, #45D54C 100%);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.3);
+    }
+
+    .match-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
       padding: 0 1rem;
 
-      .round-text {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #121212;
-      }
-
       .match-progress {
         font-size: 1.1rem;
         color: #777777;
-        font-weight: 500;
+        font-weight: 600;
+      }
+
+      .remaining-count {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 12px;
+        border: 1px solid rgba(124, 77, 255, 0.1);
+
+        .remaining-text {
+          font-size: 0.9rem;
+          color: #666;
+        }
+
+        .remaining-number {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #7C4DFF;
+        }
       }
     }
 
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid rgba(124, 77, 255, 0.1);
+    .progress-container {
+      position: relative;
+      margin-bottom: 1rem;
 
-      .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #7C4DFF 0%, #45D54C 100%);
-        transition: width 0.6s ease;
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(124, 77, 255, 0.1);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #7C4DFF 0%, #45D54C 100%);
+          transition: width 0.6s ease;
+          position: relative;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 10px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: shimmer 1.5s infinite;
+          }
+        }
       }
+
+      .progress-percentage {
+        position: absolute;
+        right: 0;
+        top: -25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #7C4DFF;
+      }
+    }
+  }
+
+  .battle-arena {
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124, 77, 255, 0.1), transparent);
+      animation: battleGlow 3s infinite;
+      z-index: -1;
     }
   }
 
@@ -401,19 +830,55 @@ onMounted(() => {
     cursor: pointer;
     transition: all 0.3s ease;
     border: 1px solid rgba(124, 77, 255, 0.1);
-    min-height: 320px;
+    min-height: 380px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+
+    .card-glow {
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #7C4DFF, #45D54C);
+      border-radius: 24px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .company-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: linear-gradient(135deg, #7C4DFF 0%, #45D54C 100%);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
 
     &:hover {
       transform: translateY(-5px);
-      border-color: #7C4DFF;
+      border-color: transparent;
       box-shadow: 0 12px 32px rgba(124, 77, 255, 0.2);
 
+      .card-glow {
+        opacity: 1;
+      }
+
       .company-emoji {
-        transform: scale(1.05);
+        transform: scale(1.1);
+      }
+
+      .click-hint {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
@@ -430,17 +895,44 @@ onMounted(() => {
       color: #121212;
     }
 
-    .company-category {
-      font-size: 1rem;
-      color: #7C4DFF;
-      margin-bottom: 1.2rem;
-      font-weight: 500;
+    .company-stats {
+      margin-bottom: 1rem;
+
+      .stat-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: rgba(124, 77, 255, 0.1);
+        color: #7C4DFF;
+        padding: 0.4rem 0.8rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
     }
 
     .company-description {
       font-size: 0.95rem;
       color: #444444;
       line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .click-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      color: #7C4DFF;
+      font-weight: 600;
+      font-size: 0.9rem;
+
+      .hint-arrow {
+        animation: bounce 1s infinite;
+      }
     }
   }
 
@@ -453,20 +945,65 @@ onMounted(() => {
       order: -1;
     }
 
-    .vs-text {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: #121212;
-      padding: 1.5rem;
-      border: 2px solid rgba(124, 77, 255, 0.2);
+    .vs-circle {
+      position: relative;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
-      width: 90px;
-      height: 90px;
+      background: linear-gradient(135deg, #7C4DFF 0%, #45D54C 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #ffffff;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 24px rgba(124, 77, 255, 0.3);
+
+      .vs-inner {
+        position: relative;
+        width: 85px;
+        height: 85px;
+        background: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .vs-text {
+          font-size: 1.8rem;
+          font-weight: 800;
+          color: #121212;
+        }
+
+        .battle-sparks {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+
+          .spark {
+            position: absolute;
+            font-size: 1.2rem;
+            animation: sparkle 2s infinite;
+
+            &.spark-1 {
+              top: -10px;
+              left: 50%;
+              animation-delay: 0s;
+            }
+
+            &.spark-2 {
+              right: -10px;
+              top: 50%;
+              animation-delay: 0.7s;
+            }
+
+            &.spark-3 {
+              bottom: -10px;
+              left: 50%;
+              animation-delay: 1.4s;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -478,9 +1015,45 @@ onMounted(() => {
   position: relative;
   z-index: 1;
 
+  .celebration-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+
+    .confetti {
+      position: absolute;
+      font-size: 2rem;
+      animation: confettiFall 3s infinite;
+
+      &:nth-child(1) { left: 10%; animation-delay: 0s; }
+      &:nth-child(2) { left: 20%; animation-delay: 0.5s; }
+      &:nth-child(3) { left: 30%; animation-delay: 1s; }
+      &:nth-child(4) { left: 40%; animation-delay: 1.5s; }
+      &:nth-child(5) { left: 50%; animation-delay: 2s; }
+      &:nth-child(6) { left: 60%; animation-delay: 2.5s; }
+      &:nth-child(7) { left: 70%; animation-delay: 3s; }
+      &:nth-child(8) { left: 80%; animation-delay: 3.5s; }
+    }
+  }
+
   .winner-announcement {
     max-width: 550px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .crown-animation {
+    margin-bottom: 1rem;
+
+    .crown {
+      font-size: 4rem;
+      animation: crownFloat 2s ease-in-out infinite;
+    }
   }
 
   .winner-title {
@@ -489,11 +1062,16 @@ onMounted(() => {
     color: #121212;
     font-weight: 800;
     
-    span {
+    .gradient-text {
       background: linear-gradient(135deg, #7C4DFF 0%, #45D54C 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+    }
+
+    .celebration-emoji {
+      margin: 0 0.5rem;
+      animation: bounce 1s infinite alternate;
     }
   }
 
@@ -504,11 +1082,43 @@ onMounted(() => {
     margin-bottom: 2.5rem;
     border: 2px solid #7C4DFF;
     box-shadow: 0 8px 32px rgba(124, 77, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+
+    .winner-glow {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, #7C4DFF, #45D54C, #7C4DFF);
+      animation: rotate 3s linear infinite;
+      opacity: 0.1;
+    }
+
+    .winner-badge {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: #121212;
+      padding: 0.6rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+      border: 2px solid #ffffff;
+
+      .badge-icon {
+        margin-right: 0.5rem;
+      }
+    }
 
     .winner-emoji {
       font-size: 5.5rem;
       margin-bottom: 1.5rem;
-      animation: bounce 2s infinite;
+      animation: winnerBounce 2s infinite;
     }
 
     .winner-name {
@@ -522,16 +1132,49 @@ onMounted(() => {
     }
 
     .winner-category {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
       font-size: 1.3rem;
       margin-bottom: 1.2rem;
       color: #7C4DFF;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .winner-description {
       font-size: 1.1rem;
       color: #444444;
       line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .achievement-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+
+      .achievement-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 1rem;
+        background: rgba(124, 77, 255, 0.1);
+        border-radius: 12px;
+        border: 1px solid rgba(124, 77, 255, 0.2);
+
+        .achievement-icon {
+          font-size: 1.5rem;
+        }
+
+        .achievement-text {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #7C4DFF;
+        }
+      }
     }
   }
 
@@ -545,6 +1188,10 @@ onMounted(() => {
     }
 
     button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
       padding: 16px 32px;
       font-size: 1.1rem;
       font-weight: 600;
@@ -552,6 +1199,10 @@ onMounted(() => {
       border-radius: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
+
+      .btn-icon {
+        font-size: 1.2rem;
+      }
 
       &.restart-btn {
         background: linear-gradient(135deg, #7C4DFF 0%, #45D54C 100%);
@@ -604,8 +1255,117 @@ onMounted(() => {
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes battleGlow {
+  0%, 100% {
+    opacity: 0.1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    top: -10%;
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    transform: translateX(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes crownFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes winnerBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-15px) scale(1.05);
+  }
+  60% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .company-card,
 .winner-card {
   animation: fadeIn 0.6s ease-out;
+}
+
+.start-screen,
+.game-screen,
+.result-screen {
+  animation: fadeIn 0.8s ease-out;
 }
 </style>
