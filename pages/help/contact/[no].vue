@@ -50,6 +50,25 @@
             답변일: {{ transferDate(contact.updatedDt) }}
           </div>
         </div>
+
+        <!-- 관리자 답변 입력 폼 -->
+        <div class="admin-answer-form" v-if="!contact.answer">
+          <h3>답변 작성</h3>
+          <form @submit.prevent="submitAnswer">
+            <textarea 
+              v-model="answerText" 
+              placeholder="답변을 입력해주세요..."
+              rows="6"
+              class="answer-textarea"
+              required
+            ></textarea>
+            <div class="form-actions">
+              <button type="submit" class="btn-submit" :disabled="!answerText.trim() || isSubmitting">
+                {{ isSubmitting ? '답변 등록 중...' : '답변 등록' }}
+              </button>
+            </div>
+          </form>
+        </div>
         
         <div class="actions">
           <button @click="goBack" class="btn-back">목록으로</button>
@@ -66,6 +85,8 @@ import type { Contact } from '~/types/contact'
 const route = useRoute()
 const contact = ref<Contact>({} as Contact)
 const { transferDate } = useDate()
+const answerText = ref('')
+const isSubmitting = ref(false)
 
 const typeOptions = [
   { value: 'general', label: '일반 문의' },
@@ -95,6 +116,43 @@ onMounted(async () => {
     navigateTo('/help/contact')
   }
 })
+
+const submitAnswer = async () => {
+  if (!answerText.value.trim()) {
+    alert('답변을 입력해주세요.')
+    return
+  }
+
+  isSubmitting.value = true
+
+  try {
+    await $fetch('/api/help/contact', {
+      method: 'PATCH',
+      params: {
+        no: route.params.no
+      },
+      body: {
+        answer: answerText.value.trim()
+      }
+    })
+
+    // 답변 등록 후 데이터 새로고침
+    contact.value = await $fetch('/api/help/contact', {
+      method: 'GET',
+      params: {
+        no: route.params.no
+      }
+    })
+
+    answerText.value = ''
+    alert('답변이 성공적으로 등록되었습니다.')
+  } catch (error) {
+    console.error('답변 등록 실패:', error)
+    alert('답변 등록에 실패했습니다.')
+  } finally {
+    isSubmitting.value = false
+  }
+}
 
 const goBack = () => {
   navigateTo('/help/contact')
@@ -192,7 +250,8 @@ const goBack = () => {
   }
   
   .contact-content,
-  .contact-answer {
+  .contact-answer,
+  .admin-answer-form {
     margin-bottom: 30px;
     
     h3 {
@@ -217,6 +276,67 @@ const goBack = () => {
       font-size: 14px;
       color: #666;
       text-align: right;
+    }
+  }
+
+  .admin-answer-form {
+    background: #f8fcff;
+    border: 1px solid #e8f4fd;
+    border-radius: 8px;
+    padding: 25px;
+
+    h3 {
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    .answer-textarea {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      min-height: 120px;
+      font-family: inherit;
+
+      &:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      }
+
+      &::placeholder {
+        color: #999;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+
+      .btn-submit {
+        padding: 12px 24px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover:not(:disabled) {
+          background: #0056b3;
+        }
+
+        &:disabled {
+          background: #6c757d;
+          cursor: not-allowed;
+        }
+      }
     }
   }
   

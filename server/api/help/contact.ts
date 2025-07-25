@@ -1,4 +1,4 @@
-import { getContactById, makeContact } from '~/server/services/help/contactService'
+import { getContactById, makeContact, updateAnswer } from '~/server/services/help/contactService'
 
 export default defineEventHandler(async (event) => {
   const method = getMethod(event)
@@ -77,6 +77,46 @@ export default defineEventHandler(async (event) => {
     } catch (error: any) {
       console.error('Contact creation error:', error)
 
+      if (error.statusCode) {
+        throw error
+      }
+      
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Internal Server Error'
+      })
+    }
+  }
+
+  // PATCH - 답변 업데이트
+  if (method === 'PATCH') {
+    try {
+      const body = await readBody(event)
+      const query = getQuery(event)
+      const contactNo = parseInt(query.no as string)
+
+      if (isNaN(contactNo)) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Invalid contact number'
+        })
+      }
+
+      if (!body.answer) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Answer is required'
+        })
+      }
+
+      const updatedContact = await updateAnswer(contactNo, body.answer)
+      
+      return {
+        success: true,
+        message: 'Answer updated successfully',
+        contact: updatedContact
+      }
+    } catch (error: any) {
       if (error.statusCode) {
         throw error
       }

@@ -67,3 +67,15 @@ export const createContact = async (data: {
     }
   })
 }
+
+export const updateContactAnswer = async (contactNo: number, answer: string) => {
+  return await prisma.contact.update({
+    where: {
+      no: contactNo
+    },
+    data: {
+      answer: answer,
+      updatedDt: new Date()
+    }
+  })
+}

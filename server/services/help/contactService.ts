@@ -1,4 +1,4 @@
-import { selectAllContact, getContact, createContact } from "~/server/repositories/help/contactRepository"
+import { selectAllContact, getContact, createContact, updateContactAnswer } from "~/server/repositories/help/contactRepository"
 
 export const getContacts = async () => {
   return await selectAllContact()
@@ -17,4 +17,8 @@ export const makeContact = async (data: {
   phoneNumber?: string; 
 }) => {
   return await createContact(data)
+}
+
+export const updateAnswer = async (contactNo: number, answer: string) => {
+  return await updateContactAnswer(contactNo, answer)
 }
