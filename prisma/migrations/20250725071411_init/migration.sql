@@ -60,6 +60,7 @@ CREATE TABLE `User` (
     `deletedDt` DATETIME(3) NULL,
     `deletedYn` BOOLEAN NOT NULL DEFAULT false,
     `role` ENUM('ADMIN', 'USER', 'GUEST') NOT NULL DEFAULT 'USER',
+    `extra01` VARCHAR(255) NULL DEFAULT '',
 
     UNIQUE INDEX `User_uuid_key`(`uuid`),
     UNIQUE INDEX `User_email_key`(`email`),

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `extra02` VARCHAR(255) NULL DEFAULT '';

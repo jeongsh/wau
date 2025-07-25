@@ -13,7 +13,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "prisma:migrate": "npx prisma migrate dev --create-only && npx prisma migrate deploy",
-    "prisma:pull": "npx prisma db pull && npx prisma generate"
+    "prisma:pull": "npx prisma db pull && npx prisma generate",
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
