@@ -35,8 +35,10 @@
           >
             <option value="" disabled>선택하세요</option>
             <option value="most">많이하는 질문</option>
-            <option value="essential">필수 확인 질문</option>
-            <option value="general">일반 질문</option>
+            <option value="billing">주문/결제</option>
+            <option value="delivery">배송 관련</option>
+            <option value="member">회원 관련</option>
+            <option value="error">오류/버그</option>
           </select>
         </div>
         <div class="form-group">

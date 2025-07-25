@@ -6,16 +6,22 @@ export const useDate = () => {
 
   const transferDate = (date: Date | string | null) => {
     if (!date) return ''
-    return dayjs.utc(date).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss')
+    return dayjs.utc(date).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm')
   }
 
-  const transferDateFormatted = (date: Date | string | null, format: string = 'YYYY년 MM월 dddd HH:ss:mm') => {
+  const transferDateFormatted = (date: Date | string | null, format: string = 'YYYY-MM-DD') => {
+    if (!date) return ''
+    return dayjs.utc(date).tz('Asia/Seoul').format(format)
+  }
+
+  const transferDateTimeFormatted = (date: Date | string | null, format: string = 'YYYY년 MM월 dddd HH:mm:ss') => {
     if (!date) return ''
     return dayjs.utc(date).tz('Asia/Seoul').format(format)
   }
 
   return {
     transferDate,
-    transferDateFormatted
+    transferDateFormatted,
+    transferDateTimeFormatted
   }
 }

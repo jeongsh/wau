@@ -114,6 +114,11 @@ const submitContact = async () => {
     return
   }
   
+  if(!contact.value.userEmail?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    alert('유효한 이메일 주소를 입력해주세요.')
+    return
+  }
+
   if (!contact.value.type) {
     alert('문의 유형을 선택해주세요.')
     return
@@ -148,6 +153,7 @@ const submitContact = async () => {
     await navigateTo('/help/contact')
     
   } catch (error) {
+    
     console.error('문의 전송 실패:', error)
     alert('문의 전송에 실패했습니다. 다시 시도해주세요.')
   } finally {
