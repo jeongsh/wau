@@ -22,10 +22,3 @@ logs
 # .env
 # .env.*
 # !.env.example
-
-/generated/prisma
-
-/generated/prisma
-
-# db 마이그레이션 폴더 제외
-/prisma/migrations
