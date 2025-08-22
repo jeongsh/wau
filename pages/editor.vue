@@ -187,9 +187,20 @@
         <UtilsAccordion :title="'예식 장소'">
           <div class="box-input">
             <p class="input-title">주소</p>
-            <input class="input-l" type="text" v-model="weddingInfo.location.address" placeholder="예식 장소를 입력해주세요." />
-            <button class="btn-find">주소 검색</button>
+            <div class="address-search-container">
+              <input 
+                class="input-address" 
+                type="text" 
+                v-model="weddingInfo.location.address" 
+                @click="openPostcodeSearch"
+                @keyup.enter="handleAddressSearch"
+                placeholder="주소를 검색하려면 클릭하세요" 
+                readonly
+              />
+              <button class="btn-postcode" @click="openPostcodeSearch">우편번호 검색</button>
+            </div>
           </div>
+          <div id="map" style="width:100%;height:300px;margin:8px 0;border-radius:8px;border:1px solid #dbdbdb;"></div>
           <div class="box-input">
             <p class="input-title">예식장 이름</p>
             <input class="input-l" type="text" v-model="weddingInfo.location.name" placeholder="층과 홀을 입력해주세요." />
@@ -446,6 +457,158 @@ import { useEditorStore } from '~/stores/editor';
 import getVideoId from 'get-video-id';
 import Sortable from 'sortablejs';
 
+// 카카오맵 관련 변수
+let map: any = null;
+let geocoder: any = null;
+let marker: any = null;
+
+// 카카오맵 초기화
+const initKakaoMap = () => {
+  if (typeof window !== 'undefined' && (window as any).kakao) {
+    const container = document.getElementById('map');
+    const options = {
+      center: new (window as any).kakao.maps.LatLng(37.5665, 126.9780), // 서울시청 좌표
+      level: 3
+    };
+
+    map = new (window as any).kakao.maps.Map(container, options);
+    geocoder = new (window as any).kakao.maps.services.Geocoder();
+    
+    // 마커 생성
+    marker = new (window as any).kakao.maps.Marker({
+      position: map.getCenter()
+    });
+    marker.setMap(map);
+
+    // 기존 주소가 있다면 해당 위치로 이동
+    if (weddingInfo.value.location.address) {
+      searchAndMoveToAddress(weddingInfo.value.location.address);
+    }
+  }
+};
+
+// 주소 검색 및 지도 이동
+const searchAndMoveToAddress = (address: string) => {
+  if (!geocoder || !address.trim()) return;
+
+  geocoder.addressSearch(address, (result: any, status: any) => {
+    if (status === (window as any).kakao.maps.services.Status.OK) {
+      const coords = new (window as any).kakao.maps.LatLng(result[0].y, result[0].x);
+      
+      // 지도 중심을 결과값으로 받은 위치로 이동
+      map.setCenter(coords);
+      
+      // 마커를 결과값으로 받은 위치로 이동
+      marker.setPosition(coords);
+      
+      // 좌표 정보 저장
+      weddingInfo.value.location.latitude = parseFloat(result[0].y);
+      weddingInfo.value.location.longitude = parseFloat(result[0].x);
+    } else {
+      alert('주소를 찾을 수 없습니다.');
+    }
+  });
+};
+
+// 주소 검색 버튼 클릭 핸들러
+const handleAddressSearch = () => {
+  const address = weddingInfo.value.location.address;
+  if (!address.trim()) {
+    alert('주소를 입력해주세요.');
+    return;
+  }
+  searchAndMoveToAddress(address);
+};
+
+// 카카오맵 스크립트 로드
+const loadKakaoMapScript = () => {
+  return new Promise((resolve) => {
+    if ((window as any).kakao) {
+      resolve(true);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=f58ab8222e504ffe56691bb59fda414f&libraries=services&autoload=false';
+    script.onload = () => {
+      (window as any).kakao.maps.load(() => {
+        resolve(true);
+      });
+    };
+    document.head.appendChild(script);
+  });
+};
+
+// Daum 우편번호 서비스 로드
+const loadDaumPostcodeScript = () => {
+  return new Promise((resolve) => {
+    if ((window as any).daum && (window as any).daum.Postcode) {
+      resolve(true);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.onload = () => resolve(true);
+    document.head.appendChild(script);
+  });
+};
+
+// 우편번호 검색 팝업 열기
+const openPostcodeSearch = async () => {
+  try {
+    await loadDaumPostcodeScript();
+    
+    new (window as any).daum.Postcode({
+      oncomplete: function(data: any) {
+        // 선택한 주소의 기본 정보
+        let addr = ''; // 주소 변수
+        let extraAddr = ''; // 참고항목 변수
+
+        // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+        if (data.userSelectedType === 'R') { // 도로명 주소 선택
+          addr = data.roadAddress;
+        } else { // 지번 주소 선택 - J
+          addr = data.jibunAddress;
+        }
+
+        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+        if(data.userSelectedType === 'R'){
+          if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+            extraAddr += data.bname;
+          }
+          if(data.buildingName !== '' && data.apartment === 'Y'){
+            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+          }
+          if(extraAddr !== ''){
+            extraAddr = ' (' + extraAddr + ')';
+          }
+        }
+
+        // 기본 주소와 상세 주소 분리
+        baseAddress.value = addr;
+        weddingInfo.value.location.address = addr + extraAddr;
+        
+        // 우편번호 검색 후 자동으로 지도 이동
+        searchAndMoveToAddress(addr);
+      },
+      onresize: function(size: any) {
+        // 팝업 크기 조정
+      },
+      width: '100%',
+      height: '100%'
+    }).open();
+  } catch (error) {
+    console.error('우편번호 서비스 로드 실패:', error);
+    alert('우편번호 검색 서비스를 불러올 수 없습니다.');
+  }
+};
+
+// 상세주소 업데이트
+const updateFullAddress = () => {
+  const fullAddress = baseAddress.value + (detailAddress.value ? ' ' + detailAddress.value : '');
+  weddingInfo.value.location.address = fullAddress;
+};
 const editorStore = useEditorStore();
 const { weddingInfo, designInfo, orderedComponents } = storeToRefs(editorStore);
 
@@ -516,9 +679,26 @@ const formatedDate = (date: Date) => {
 const isLoading = ref(true);
 const videoUrl = ref<string | null>(null);
 const sortableContainer = ref<HTMLElement | null>(null);
+const detailAddress = ref('');
+const baseAddress = ref('');
 let sortableInstance: Sortable | null = null;
 
-onMounted(() => {
+onMounted(async () => {
+  // 기존 주소가 있다면 기본 주소와 상세 주소 분리
+  if (weddingInfo.value.location.address) {
+    baseAddress.value = weddingInfo.value.location.address;
+  }
+
+  // 카카오맵 스크립트 로드 및 초기화
+  try {
+    await loadKakaoMapScript();
+    nextTick(() => {
+      initKakaoMap();
+    });
+  } catch (error) {
+    console.error('카카오맵 로드 실패:', error);
+  }
+
   // box-datepicker가 아닌 곳을 클릭하면 box-datepicker의 active 클래스를 제거
   document.addEventListener('click', (event) => {
     const wrapDatePicker = document.querySelector('.wrap-datepicker');
@@ -989,6 +1169,87 @@ const onChangeVideoUrl = () => {
     input[type="file"]{
       display: none;
     }
+  }
+}
+.btn-find {
+  height: 42px;
+  padding: 0 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #0056b3;
+  }
+}
+
+.address-search-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  
+  .input-address {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    font-size: 13px;
+    background: #f8f9fa;
+    color: #2b2b2b;
+    cursor: pointer;
+    
+    &::placeholder {
+      color: #999;
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      background: #fff;
+    }
+  }
+  
+  .btn-postcode {
+    height: 42px;
+    padding: 0 16px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: #218838;
+    }
+  }
+}
+
+.input-detail-address {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fff;
+  color: #2b2b2b;
+  margin-bottom: 8px;
+  
+  &::placeholder {
+    color: #999;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #007bff;
   }
 }
 </style>
