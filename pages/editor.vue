@@ -1,8 +1,8 @@
 <template>
   <div class="wrap-editor">
-    <div class="modal-loading" v-if="isLoading">
+    <!-- <div class="modal-loading" v-if="isLoading">
       로딩중...
-    </div>
+    </div> -->
     <div class="container d-flex ai-center g-32">
       <div class="wrap-preview">
         <div class="box-preview">
