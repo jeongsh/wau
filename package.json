@@ -12,6 +12,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "netlify:build": "npm install --prefer-offline --no-audit && nuxt build",
     "prisma:migrate": "npx prisma migrate dev --create-only && npx prisma migrate deploy",
     "prisma:pull": "npx prisma db pull && npx prisma generate"
   },
@@ -43,6 +44,9 @@
     "h3": "^1.15.3",
     "prisma": "^6.11.1",
     "sass-embedded": "^1.89.2"
+  },
+  "overrides": {
+    "oxc-parser": "false"
   },
   "prisma": {
     "schema": "./prisma"
