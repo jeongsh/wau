@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
+  ssr: false,
   app: {
     head: {
       title: '와유',
@@ -37,5 +38,11 @@ export default defineNuxtConfig({
     plugins: ['relativeTime', 'utc', 'timezone'],
     defaultLocale: 'ko',
     defaultTimezone: 'Asia/Seoul'
-  }
+  },
+  nitro: {
+    preset: "static",
+    // prerender: {
+    //   routes: ["/sitemap.xml", "/robots.txt"],
+    // },
+  },
 })
