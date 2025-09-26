@@ -45,9 +45,6 @@
     "prisma": "^6.11.1",
     "sass-embedded": "^1.89.2"
   },
-  "overrides": {
-    "oxc-parser": "false"
-  },
   "prisma": {
     "schema": "./prisma"
   }
