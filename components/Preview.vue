@@ -50,12 +50,29 @@
 </template>
 
 <script setup lang="ts">
-import type { DesignInfo, WeddingInfo } from '~/types/editor'; 
+import type { DesignInfo, WeddingInfo } from '~/types/editor';
 import { useEditorStore } from '~/stores/editor';
+import { computed } from 'vue';
+import MainVisualA from '@/components/blocks/mainVisual/A.vue';
+import MainVisualB from '@/components/blocks/mainVisual/B.vue';
+// 필요한 컴포넌트 추가 import
+// 필요한 MainVisual 컴포넌트 추가 import
+
+const mainVisualComponents: { [key: string]: any } = {
+  A: MainVisualA,
+  B: MainVisualB,
+  // ...추가 컴포넌트
+};
 
 const editorStore = useEditorStore();
 const { designInfo, weddingInfo, formattedDate, formattedTime, orderedComponents } = storeToRefs(editorStore);
 
+const MainVisualComponent = computed(() => {
+  const mainType = designInfo.value.mainVisual.type || 'A';
+  return mainVisualComponents[mainType] || mainVisualComponents['A'];
+});
+
+// 기존 동적 import 방식은 유지하되, MainVisual만 명시적 import로 변경
 const IntroComponent = computed(() => {
   const IntroType = designInfo.value.intro.type;
   if(IntroType !== 'none') {
@@ -63,13 +80,6 @@ const IntroComponent = computed(() => {
       import(`@/components/blocks/intros/${IntroType}.vue`)
     );
   }
-});
-
-const MainVisualComponent = computed(() => {
-  const mainType = designInfo.value.mainVisual.type || 'A';
-  return defineAsyncComponent(() =>
-    import(`@/components/blocks/MainVisual/${mainType}.vue`)
-  );
 });
 
 const DesignPagesComponent = computed(() => {
