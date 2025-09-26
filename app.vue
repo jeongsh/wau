@@ -7,6 +7,7 @@
 <style lang="scss">
 .body{
   padding-top: 56px; /* 헤더 높이 */
+  
 }
 </style>
 
