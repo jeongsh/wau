@@ -44,26 +44,5 @@ export default defineNuxtConfig({
     // prerender: {
     //   routes: ["/sitemap.xml", "/robots.txt"],
     // },
-    rollupConfig: {
-      external: ['oxc-parser']
-    },
-    esbuild: {
-      options: {
-        target: 'esnext'
-      }
-    }
-  },
-  build: {
-    transpile: ['nuxt-tiptap-editor']
-  },
-  vite: {
-    optimizeDeps: {
-      exclude: ['oxc-parser']
-    },
-    build: {
-      rollupOptions: {
-        external: ['oxc-parser']
-      }
-    }
   },
 })
